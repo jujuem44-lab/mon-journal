@@ -370,11 +370,88 @@ body {
   .day-header .dh-num { font-size: 2.3rem; }
   .av-wrap, .av-img { width: 70px; height: 70px; }
 }
+
+/* ───── LOGIN ───── */
+#loginScreen {
+  min-height: 100dvh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 28px; padding: 24px;
+  background: linear-gradient(160deg, #FFF0F4 0%, #FFF8F2 60%, #FFF0E0 100%);
+}
+.login-avatar {
+  width: 100px; height: 100px; border-radius: 50%;
+  object-fit: cover; object-position: center top;
+  border: 4px solid var(--pink-l);
+  box-shadow: 0 6px 24px rgba(255,107,138,.22);
+}
+.login-title {
+  font-family: 'Fraunces', serif;
+  font-size: 1.6rem; font-weight: 700;
+  color: var(--pink); text-align: center; line-height: 1.2;
+}
+.login-sub {
+  font-size: .82rem; color: var(--text-mid);
+  text-align: center; margin-top: 4px; font-style: italic;
+}
+.login-box {
+  background: var(--white);
+  border: 2px solid var(--pink-l);
+  border-radius: 20px; padding: 28px 24px;
+  width: 100%; max-width: 320px;
+  display: flex; flex-direction: column; gap: 14px;
+  box-shadow: 0 8px 32px rgba(255,107,138,.12);
+}
+.login-label {
+  font-size: .7rem; font-weight: 800;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: var(--text-mid);
+}
+.login-input {
+  width: 100%; padding: 12px 16px;
+  border: 2px solid var(--pink-l); border-radius: 12px;
+  font-family: 'Nunito', sans-serif; font-size: 1rem;
+  color: var(--text); background: var(--cream);
+  outline: none; transition: border-color .2s;
+}
+.login-input:focus { border-color: var(--pink); background: var(--white); }
+.login-input.error { border-color: #F05050; background: #FFF0F0; }
+.login-btn {
+  width: 100%; padding: 13px;
+  background: linear-gradient(135deg, var(--pink), var(--pink-d));
+  color: white; border: none; border-radius: 12px;
+  font-family: 'Nunito', sans-serif; font-size: .95rem; font-weight: 800;
+  cursor: pointer; transition: opacity .2s, transform .1s;
+  box-shadow: 0 4px 14px rgba(255,107,138,.35);
+}
+.login-btn:hover { opacity: .9; }
+.login-btn:active { transform: scale(.97); }
+.login-error {
+  font-size: .78rem; color: #D03030;
+  text-align: center; font-weight: 700; min-height: 18px;
+}
+#app { display: none; }
 </style>
 </head>
 <body>
 
-<!-- TOP BAR -->
+<!-- LOGIN -->
+<div id="loginScreen">
+  <img src="avatar.png" alt="Juju" class="login-avatar">
+  <div>
+    <div class="login-title">✨ Mon Journal</div>
+    <div class="login-sub">Ton espace rien qu'à toi 💖</div>
+  </div>
+  <div class="login-box">
+    <div class="login-label">Mot de passe</div>
+    <input class="login-input" type="password" id="pwdInput" placeholder="••••••••" autocomplete="current-password" />
+    <div class="login-error" id="loginError"></div>
+    <button class="login-btn" onclick="doLogin()">Entrer ✨</button>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
 <div class="top-bar">
   <div class="app-logo">📖 Mon Journal</div>
   <div class="month-tabs">
@@ -601,9 +678,42 @@ body {
 
 </div><!-- /main -->
 
+</div><!-- /app -->
+
 <div class="save-toast" id="toast">✓ Sauvegardé</div>
 
 <script>
+/* =========================================================
+   LOGIN
+   ========================================================= */
+const PASSWORD    = 'JUJU1506';
+const SESSION_KEY = 'journal_auth_v1';
+
+function doLogin() {
+  const input = document.getElementById('pwdInput');
+  const errEl = document.getElementById('loginError');
+  if (input.value === PASSWORD) {
+    sessionStorage.setItem(SESSION_KEY, '1');
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    init();
+  } else {
+    input.classList.add('error');
+    errEl.textContent = 'Mot de passe incorrect 🙅‍♀️';
+    input.value = '';
+    setTimeout(() => { input.classList.remove('error'); errEl.textContent = ''; }, 1800);
+  }
+}
+document.getElementById('pwdInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') doLogin();
+});
+
+// Déjà authentifiée dans cette session ?
+if (sessionStorage.getItem(SESSION_KEY) === '1') {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  init();
+}
 /* =========================================================
    DAYS
    ========================================================= */
@@ -1015,7 +1125,6 @@ function init() {
   setTimeout(() => scrollDotVisible(curIdx), 150);
 }
 
-init();
 </script>
 </body>
 </html>
