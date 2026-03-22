@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Mon Journal ✨ — Juju</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,300;1,9..144,500&family=Nunito:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream:       #FFF8F2;
+  --white:       #FFFFFF;
+  --pink:        #FF6B8A;
+  --pink-l:      #FFE0E8;
+  --pink-ll:     #FFF0F4;
+  --pink-d:      #D94F6D;
+  --amber:       #FFAD3B;
+  --amber-l:     #FFF0D0;
+  --teal:        #5EC4C4;
+  --teal-l:      #D0EEEE;
+  --mint:        #72D0A0;
+  --mint-l:      #D0F0E0;
+  --lilac:       #C49FE0;
+  --lilac-l:     #EEE0FF;
+  --text:        #252525;
+  --text-mid:    #666;
+  --text-soft:   #AAA;
+  --border:      #F0E4DC;
+  --shadow:      0 4px 24px rgba(255,107,138,.09);
+  --shadow-lg:   0 8px 36px rgba(255,107,138,.14);
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: var(--cream);
+  font-family: 'Nunito', sans-serif;
+  color: var(--text);
+  min-height: 100dvh;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ───── TOP BAR ───── */
+.top-bar {
+  position: sticky; top: 0; z-index: 200;
+  background: var(--white);
+  border-bottom: 2px solid var(--pink-l);
+  padding: 10px 16px;
+  display: flex; align-items: center; justify-content: space-between;
+  box-shadow: 0 2px 16px rgba(255,107,138,.08);
+}
+.app-logo {
+  font-family: 'Fraunces', serif;
+  font-size: 1.15rem; font-weight: 700;
+  color: var(--pink);
+  display: flex; align-items: center; gap: 6px;
+}
+.month-tabs { display: flex; gap: 6px; }
+.month-tab {
+  padding: 5px 13px;
+  border-radius: 20px;
+  border: 2px solid var(--pink-l);
+  background: var(--white);
+  color: var(--text-mid);
+  font-family: 'Nunito', sans-serif;
+  font-size: .82rem; font-weight: 700;
+  cursor: pointer; transition: all .2s;
+}
+.month-tab.active { background: var(--pink); border-color: var(--pink); color: white; }
+.streak-pill {
+  background: linear-gradient(135deg, var(--amber), #FF8C42);
+  color: white; padding: 4px 11px;
+  border-radius: 20px; font-size: .78rem; font-weight: 800;
+  box-shadow: 0 2px 8px rgba(255,173,59,.3);
+}
+
+/* ───── DOT STRIP ───── */
+.dot-strip-wrap {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto; white-space: nowrap;
+  scrollbar-width: none;
+}
+.dot-strip-wrap::-webkit-scrollbar { display: none; }
+.dot-strip {
+  display: inline-flex; gap: 4px;
+  padding: 10px 16px;
+}
+.day-dot {
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  cursor: pointer; min-width: 38px;
+  transition: transform .15s;
+}
+.day-dot:active { transform: scale(.9); }
+.day-dot .d-circle {
+  width: 34px; height: 34px; border-radius: 50%;
+  border: 2px solid var(--border);
+  background: var(--white);
+  display: flex; align-items: center; justify-content: center;
+  font-size: .78rem; font-weight: 700; color: var(--text-soft);
+  transition: all .2s;
+}
+.day-dot .d-label {
+  font-size: .58rem; text-transform: uppercase;
+  letter-spacing: .5px; color: var(--text-soft); font-weight: 600;
+}
+.day-dot.is-active .d-circle {
+  background: var(--pink); border-color: var(--pink);
+  color: white; transform: scale(1.12);
+  box-shadow: 0 3px 10px rgba(255,107,138,.35);
+}
+.day-dot.is-today:not(.is-active) .d-circle {
+  border-color: var(--pink); color: var(--pink); background: var(--pink-ll); font-weight: 900;
+}
+.day-dot.is-done:not(.is-active) .d-circle {
+  background: var(--mint-l); border-color: var(--mint); color: #2A8C5A;
+}
+.day-dot.is-done:not(.is-active) .d-circle::after {
+  content: '✓'; font-size: .65rem;
+}
+.day-dot.is-done:not(.is-active) .d-circle { font-size: 0; }
+
+/* ───── MAIN ───── */
+.main {
+  max-width: 660px; margin: 0 auto;
+  padding: 20px 14px 100px;
+}
+
+/* ───── DAY NAV + HEADER ───── */
+.day-nav {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 18px;
+}
+.nav-btn {
+  width: 42px; height: 42px; border-radius: 50%;
+  border: 2px solid var(--pink-l); background: var(--white);
+  font-size: 1rem; cursor: pointer; color: var(--pink);
+  display: flex; align-items: center; justify-content: center;
+  transition: all .2s; flex-shrink: 0;
+}
+.nav-btn:hover:not(:disabled) { background: var(--pink); color: white; border-color: var(--pink); }
+.nav-btn:disabled { opacity: .3; cursor: not-allowed; }
+.day-header { text-align: center; animation: fadeDown .4s ease; }
+.day-header .dh-label {
+  font-family: 'Fraunces', serif; font-size: .8rem; font-weight: 300;
+  letter-spacing: 3px; text-transform: uppercase; color: var(--text-mid);
+  font-style: italic;
+}
+.day-header .dh-num {
+  font-family: 'Fraunces', serif; font-size: 2.8rem; font-weight: 700;
+  color: var(--pink); line-height: 1.05;
+}
+.day-header .dh-month {
+  font-family: 'Fraunces', serif; font-size: 1.1rem; font-weight: 300;
+  color: var(--text); font-style: italic;
+}
+
+/* ───── PROGRESS ───── */
+.prog-wrap { margin-bottom: 20px; }
+.prog-meta {
+  display: flex; justify-content: space-between;
+  font-size: .78rem; color: var(--text-mid);
+  margin-bottom: 5px; font-weight: 600;
+}
+.prog-track {
+  height: 7px; background: var(--pink-l); border-radius: 10px; overflow: hidden;
+}
+.prog-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--pink), var(--amber));
+  border-radius: 10px; transition: width .6s cubic-bezier(.4,0,.2,1);
+}
+
+/* ───── AVATAR MANTRA ───── */
+.avatar-mantra {
+  display: flex; align-items: flex-end; gap: 14px;
+  margin-bottom: 24px; animation: fadeUp .45s ease;
+}
+.av-wrap {
+  flex-shrink: 0;
+  width: 84px; height: 84px; position: relative;
+}
+.av-img {
+  width: 84px; height: 84px; border-radius: 50%;
+  object-fit: cover; object-position: center top;
+  border: 3px solid var(--pink-l);
+  box-shadow: 0 4px 18px rgba(255,107,138,.22);
+}
+.av-bubble {
+  flex: 1;
+  background: var(--white);
+  border: 2px solid var(--pink-l);
+  border-radius: 18px 18px 18px 4px;
+  padding: 13px 15px;
+  font-size: .88rem; line-height: 1.55;
+  color: var(--text); font-weight: 500;
+  box-shadow: var(--shadow);
+  position: relative;
+}
+
+/* ───── SECTION CARDS ───── */
+.card {
+  background: var(--white);
+  border-radius: 18px; padding: 18px;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  animation: fadeUp .4s ease;
+}
+.card-title {
+  font-family: 'Fraunces', serif;
+  font-size: 1rem; font-weight: 700;
+  color: var(--text); margin-bottom: 14px;
+  display: flex; align-items: center; gap: 8px;
+}
+.card-title .ico { font-size: 1.15rem; }
+
+/* ───── CHECKBOXES ───── */
+.ck-item {
+  display: flex; align-items: center; gap: 11px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background .15s, padding .15s;
+  user-select: none;
+}
+.ck-item:last-of-type { border-bottom: none; }
+.ck-item:active { background: var(--pink-ll); padding: 9px 8px; margin: 0 -8px; }
+.ck-box {
+  width: 24px; height: 24px; border-radius: 7px;
+  border: 2px solid var(--pink-l); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: .78rem; color: transparent;
+  transition: all .2s;
+}
+.ck-item.is-checked .ck-box {
+  background: var(--mint); border-color: var(--mint); color: white;
+}
+.ck-text {
+  font-size: .88rem; color: var(--text); flex: 1;
+  transition: all .2s;
+}
+.ck-item.is-checked .ck-text {
+  color: var(--text-soft);
+  text-decoration: line-through;
+  text-decoration-color: var(--mint);
+}
+
+/* ───── TEXT INPUTS ───── */
+.field-label {
+  display: block; font-size: .72rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .6px;
+  color: var(--text-mid); margin-top: 13px; margin-bottom: 5px;
+}
+.j-input {
+  width: 100%; padding: 9px 12px;
+  border: 2px solid var(--border); border-radius: 10px;
+  font-family: 'Nunito', sans-serif; font-size: .88rem;
+  color: var(--text); background: var(--cream);
+  resize: none; outline: none;
+  transition: border-color .2s, background .2s;
+}
+.j-input:focus { border-color: var(--pink-l); background: var(--white); }
+.j-input::placeholder { color: #D4C4BC; font-style: italic; }
+
+/* ───── WATER ───── */
+.water-drops {
+  display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px;
+}
+.w-drop {
+  font-size: 1.7rem; cursor: pointer;
+  filter: grayscale(1) opacity(.28);
+  transition: all .2s; user-select: none;
+}
+.w-drop.on { filter: none; transform: scale(1.1); }
+.w-drop:active { transform: scale(.9); }
+.w-msg { font-size: .8rem; color: var(--text-mid); margin-top: 7px; font-weight: 600; min-height: 20px; }
+
+/* ───── INTENSITY ───── */
+.int-btns { display: flex; gap: 8px; margin-top: 9px; }
+.int-btn {
+  flex: 1; padding: 8px 4px; border-radius: 10px;
+  border: 2px solid var(--border); background: var(--white);
+  font-family: 'Nunito', sans-serif; font-size: .82rem; font-weight: 700;
+  cursor: pointer; transition: all .2s; text-align: center;
+}
+.int-btn.on { border-color: var(--teal); background: var(--teal-l); }
+
+/* ───── SMOKE ───── */
+.smoke-row {
+  display: flex; align-items: center; gap: 14px;
+  margin-top: 12px;
+}
+.sm-btn {
+  width: 38px; height: 38px; border-radius: 50%;
+  border: 2px solid var(--pink-l); background: var(--white);
+  font-size: 1.2rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 900; color: var(--pink);
+  transition: all .2s;
+}
+.sm-btn:hover { background: var(--pink-l); }
+.sm-num {
+  font-family: 'Fraunces', serif; font-size: 2.2rem; font-weight: 700;
+  color: var(--text); min-width: 48px; text-align: center; line-height: 1;
+}
+.sm-label { font-size: .8rem; color: var(--text-mid); }
+.sm-msg {
+  margin-top: 10px; padding: 9px 13px;
+  border-radius: 10px; font-size: .84rem; font-weight: 700;
+  display: none;
+}
+.sm-msg.show { display: block; }
+.sm-great { background: var(--mint-l); color: #1D7A50; }
+.sm-good  { background: var(--teal-l); color: #1A6E6E; }
+.sm-ok    { background: var(--amber-l); color: #9A6800; }
+.sm-bad   { background: #FFEAE0; color: #B03020; }
+
+/* ───── SLEEP ───── */
+.time-row { display: flex; gap: 10px; margin-top: 10px; }
+.time-col { flex: 1; }
+.t-input {
+  width: 100%; padding: 8px 10px;
+  border: 2px solid var(--border); border-radius: 10px;
+  font-family: 'Nunito', sans-serif; font-size: .95rem;
+  color: var(--text); background: var(--cream); outline: none;
+  transition: border-color .2s;
+}
+.t-input:focus { border-color: var(--pink-l); background: var(--white); }
+.sleep-result {
+  text-align: center; margin-top: 8px;
+  font-size: .84rem; color: var(--text-mid); font-weight: 700;
+  min-height: 22px;
+}
+
+/* ───── MOOD ───── */
+.mood-row { display: flex; gap: 10px; margin-top: 10px; }
+.mood-btn {
+  font-size: 1.9rem; cursor: pointer; padding: 4px;
+  border-radius: 8px; filter: grayscale(.5) opacity(.5);
+  transition: all .2s; user-select: none;
+}
+.mood-btn.on { filter: none; transform: scale(1.28); background: var(--pink-ll); }
+
+/* ───── SAVE TOAST ───── */
+.save-toast {
+  position: fixed; bottom: 22px; right: 18px;
+  background: var(--mint); color: white;
+  padding: 7px 16px; border-radius: 20px;
+  font-size: .78rem; font-weight: 800;
+  opacity: 0; transition: opacity .3s;
+  box-shadow: 0 3px 12px rgba(114,208,160,.35);
+  z-index: 999; pointer-events: none;
+}
+.save-toast.show { opacity: 1; }
+
+/* ───── ANIMATIONS ───── */
+@keyframes fadeDown {
+  from { opacity:0; transform:translateY(-8px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(10px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+
+/* ───── RESPONSIVE ───── */
+@media (max-width: 420px) {
+  .main { padding: 16px 11px 90px; }
+  .day-header .dh-num { font-size: 2.3rem; }
+  .av-wrap, .av-img { width: 70px; height: 70px; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+  <div class="app-logo">📖 Mon Journal</div>
+  <div class="month-tabs">
+    <button class="month-tab" id="tab-mars"  onclick="switchMonth('mars')">Mars</button>
+    <button class="month-tab" id="tab-avril" onclick="switchMonth('avril')">Avril</button>
+  </div>
+  <div class="streak-pill" id="streakEl">🔥 0j</div>
+</div>
+
+<!-- DOT STRIP -->
+<div class="dot-strip-wrap">
+  <div class="dot-strip" id="dotStrip"></div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- NAV + HEADER -->
+  <div class="day-nav">
+    <button class="nav-btn" id="prevBtn" onclick="go(-1)">←</button>
+    <div class="day-header">
+      <div class="dh-label" id="dhLabel">—</div>
+      <div class="dh-num"   id="dhNum">—</div>
+      <div class="dh-month" id="dhMonth">—</div>
+    </div>
+    <button class="nav-btn" id="nextBtn" onclick="go(1)">→</button>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="prog-wrap">
+    <div class="prog-meta">
+      <span>Avancement du jour</span>
+      <span id="progTxt">0 %</span>
+    </div>
+    <div class="prog-track">
+      <div class="prog-fill" id="progFill" style="width:0%"></div>
+    </div>
+  </div>
+
+  <!-- AVATAR + MANTRA -->
+  <div class="avatar-mantra">
+    <div class="av-wrap">
+      <img src="avatar.png" alt="Juju" class="av-img">
+    </div>
+    <div class="av-bubble" id="mantraEl">…</div>
+  </div>
+
+  <!-- ☀️ MATIN -->
+  <div class="card">
+    <div class="card-title"><span class="ico">🌅</span> Réveil & Matin</div>
+
+    <div class="ck-item" data-key="m_snooze">
+      <div class="ck-box">✓</div>
+      <div class="ck-text">Levée sans snooze (ou presque 😅)</div>
+    </div>
+    <div class="ck-item" data-key="m_tel">
+      <div class="ck-box">✓</div>
+      <div class="ck-text">Pas le téléphone direct au réveil</div>
+    </div>
+    <div class="ck-item" data-key="m_eau">
+      <div class="ck-box">✓</div>
+      <div class="ck-text">Verre d'eau dès le saut du lit 💧</div>
+    </div>
+    <div class="ck-item" data-key="m_skin">
+      <div class="ck-box">✓</div>
+      <div class="ck-text">Routine / skincare faite</div>
+    </div>
+    <div class="ck-item" data-key="m_calme">
+      <div class="ck-box">✓</div>
+      <div class="ck-text">5 min pour moi avant de plonger dans la journée 🧘‍♀️</div>
+    </div>
+
+    <label class="field-label">Comment je me sens ce matin ?</label>
+    <textarea class="j-input" rows="2" id="t_matin_feeling"
+      placeholder="Fatiguée mais motivée ? En forme ? À moitié endormie ? Ici t'es honnête."
+      oninput="saveField('matin_feeling',this.value)"></textarea>
+  </div>
+
+  <!-- 💧 HYDRATATION -->
+  <div class="card">
+    <div class="card-title"><span class="ico">💧</span> Hydratation</div>
+    <p style="font-size:.8rem;color:var(--text-mid);margin-bottom:8px;">Objectif : 8 verres — clique pour cocher !</p>
+    <div class="water-drops" id="waterDrops">
+      <span class="w-drop" data-wi="0" onclick="toggleWater(0)">💧</span>
+      <span class="w-drop" data-wi="1" onclick="toggleWater(1)">💧</span>
+      <span class="w-drop" data-wi="2" onclick="toggleWater(2)">💧</span>
+      <span class="w-drop" data-wi="3" onclick="toggleWater(3)">💧</span>
+      <span class="w-drop" data-wi="4" onclick="toggleWater(4)">💧</span>
+      <span class="w-drop" data-wi="5" onclick="toggleWater(5)">💧</span>
+      <span class="w-drop" data-wi="6" onclick="toggleWater(6)">💧</span>
+      <span class="w-drop" data-wi="7" onclick="toggleWater(7)">💧</span>
+    </div>
+    <div class="w-msg" id="waterMsg"></div>
+
+    <label class="field-label">Café / thé / autre ?</label>
+    <input type="text" class="j-input" id="t_hydra_note"
+      placeholder="Ex : 3 cafés, 2 tisanes… (sans jugement 😌)"
+      oninput="saveField('hydra_note',this.value)">
+  </div>
+
+  <!-- 🏃 SPORT -->
+  <div class="card">
+    <div class="card-title"><span class="ico">🏃‍♀️</span> Sport & Mouvement</div>
+
+    <div class="ck-item" data-key="s_fait">
+      <div class="ck-box">✓</div>
+      <div class="ck-text">J'ai bougé aujourd'hui 💪</div>
+    </div>
+
+    <label class="field-label">Quoi ?</label>
+    <input type="text" class="j-input" id="t_sport_quoi"
+      placeholder="Marche, gym, yoga, vélo, zumba dans ma cuisine…"
+      oninput="saveField('sport_quoi',this.value)">
+
+    <label class="field-label">Intensité</label>
+    <div class="int-btns">
+      <button class="int-btn" data-iv="leger"  onclick="setInt('leger',this)" >😴 Léger</button>
+      <button class="int-btn" data-iv="moyen"  onclick="setInt('moyen',this)" >💪 Moyen</button>
+      <button class="int-btn" data-iv="intense" onclick="setInt('intense',this)">🔥 Intense</button>
+    </div>
+  </div>
+
+  <!-- 🚭 CIGARETTES -->
+  <div class="card">
+    <div class="card-title"><span class="ico">🚭</span> Cigarettes</div>
+
+    <div class="smoke-row">
+      <button class="sm-btn" onclick="adjSmoke(-1)">−</button>
+      <div class="sm-num" id="smokeNum">0</div>
+      <button class="sm-btn" onclick="adjSmoke(1)">+</button>
+      <span class="sm-label">cigarettes<br>aujourd'hui</span>
+    </div>
+    <div class="sm-msg" id="smokeMsg"></div>
+
+    <div class="ck-item" data-key="s_resist" style="margin-top:12px;">
+      <div class="ck-box">✓</div>
+      <div class="ck-text">J'ai résisté à au moins 1 envie de fumer 💪</div>
+    </div>
+  </div>
+
+  <!-- 💼 BOULOT -->
+  <div class="card">
+    <div class="card-title"><span class="ico">💼</span> Boulot</div>
+
+    <div class="ck-item" data-key="w_todo">
+      <div class="ck-box">✓</div>
+      <div class="ck-text">To-do du matin faite</div>
+    </div>
+    <div class="ck-item" data-key="w_calls">
+      <div class="ck-box">✓</div>
+      <div class="ck-text">Au moins 1 session setting / appels</div>
+    </div>
+    <div class="ck-item" data-key="w_focus">
+      <div class="ck-box">✓</div>
+      <div class="ck-text">Pas de procrastination sur le principal</div>
+    </div>
+
+    <label class="field-label">Ma victoire pro du jour (même mini !) 🏆</label>
+    <input type="text" class="j-input" id="t_work_win"
+      placeholder="Script patchée, RDV quali décroché, SOP terminée…"
+      oninput="saveField('work_win',this.value)">
+  </div>
+
+  <!-- 🌙 SOIR & SOMMEIL -->
+  <div class="card">
+    <div class="card-title"><span class="ico">🌙</span> Soir & Sommeil</div>
+
+    <div class="ck-item" data-key="e_diner">
+      <div class="ck-box">✓</div>
+      <div class="ck-text">Dîner correct (pas que du café à 20h 😅)</div>
+    </div>
+    <div class="ck-item" data-key="e_ecran">
+      <div class="ck-box">✓</div>
+      <div class="ck-text">Téléphone posé 30 min avant de dormir</div>
+    </div>
+    <div class="ck-item" data-key="e_calme">
+      <div class="ck-box">✓</div>
+      <div class="ck-text">Je me suis accordé un moment calme ce soir ✨</div>
+    </div>
+
+    <div class="time-row">
+      <div class="time-col">
+        <label class="field-label">Heure de coucher</label>
+        <input type="time" class="t-input" id="t_sleep_bed"
+          onchange="saveField('sleep_bed',this.value);calcSleep()">
+      </div>
+      <div class="time-col">
+        <label class="field-label">Heure de réveil</label>
+        <input type="time" class="t-input" id="t_sleep_wake"
+          onchange="saveField('sleep_wake',this.value);calcSleep()">
+      </div>
+    </div>
+    <div class="sleep-result" id="sleepRes"></div>
+  </div>
+
+  <!-- ✨ RÉFLEXION -->
+  <div class="card">
+    <div class="card-title"><span class="ico">✨</span> Réflexion du jour</div>
+
+    <label class="field-label">1 chose dont je suis fière aujourd'hui</label>
+    <textarea class="j-input" rows="2" id="t_fiere"
+      placeholder="Même la plus petite victoire compte, surtout celle-là."
+      oninput="saveField('fiere',this.value)"></textarea>
+
+    <label class="field-label">1 truc à améliorer demain</label>
+    <textarea class="j-input" rows="2" id="t_amelio"
+      placeholder="Sans se flageller hein. Juste une note douce pour demain matin."
+      oninput="saveField('amelio',this.value)"></textarea>
+
+    <label class="field-label">Ma journée en un emoji</label>
+    <div class="mood-row">
+      <span class="mood-btn" data-mood="😩" onclick="setMood('😩',this)">😩</span>
+      <span class="mood-btn" data-mood="😕" onclick="setMood('😕',this)">😕</span>
+      <span class="mood-btn" data-mood="😐" onclick="setMood('😐',this)">😐</span>
+      <span class="mood-btn" data-mood="😊" onclick="setMood('😊',this)">😊</span>
+      <span class="mood-btn" data-mood="🤩" onclick="setMood('🤩',this)">🤩</span>
+    </div>
+
+    <label class="field-label">Note libre — espace 100 % à toi 💖</label>
+    <textarea class="j-input" rows="3" id="t_libre"
+      placeholder="Pensées, idées, feelings, rants... Personne te juge ici."
+      oninput="saveField('libre',this.value)"></textarea>
+  </div>
+
+</div><!-- /main -->
+
+<div class="save-toast" id="toast">✓ Sauvegardé</div>
+
+<script>
+/* =========================================================
+   DAYS
+   ========================================================= */
+const DAYS = [];
+const D_START = new Date(2026,2,22);
+const D_END   = new Date(2026,3,30);
+for (let d = new Date(D_START); d <= D_END; d.setDate(d.getDate()+1))
+  DAYS.push(new Date(d));
+
+const DAY_FR  = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
+const MON_FR  = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+
+/* =========================================================
+   MANTRAS — 1 par jour du 22 mars au 30 avril
+   ========================================================= */
+const MANTRAS = [
+/* 22 mars */ "T'as survécu à 100 % de tes mauvaises journées. Statistiquement, t'es inarrêtable. 💪",
+/* 23 mars */ "Même une fourmi déplace des montagnes. Grain par grain, chérie. 🐜⛰️",
+/* 24 mars */ "Ton futur toi se retournera et dira : 'MERCI d'avoir bu ce verre d'eau.' 💧",
+/* 25 mars */ "La perfection c'est overrated. La régularité, ça c'est sexy. 💅",
+/* 26 mars */ "Aujourd'hui t'as pas à tout changer. Juste un truc. Un seul. Go. ✅",
+/* 27 mars */ "Le Bouddha n'a pas médité en une journée. Toi t'as déjà ouvert ce journal. Respect. 🧘‍♀️",
+/* 28 mars */ "Fumer moins, bouger plus, dormir mieux. C'est pas un régime — c'est une révolution douce. 🌸",
+/* 29 mars */ "Chaque case cochée = un câlin que tu te fais à toi-même. Câline-toi fort. 🤗",
+/* 30 mars */ "Ta meilleure pote te dit : arrête de te juger et commence à te construire. 💪",
+/* 31 mars */ "Ce soir tu seras fière d'avoir commencé. Même petitement. C'est déjà ça.",
+/* 1 avril  */ "Avril commence. Nouveau mois, mêmes valeurs, plus d'élan. LET'S GO. 🚀",
+/* 2 avril  */ "L'eau hydrate le corps. Ce journal hydrate l'âme. Ok c'est un peu deep mais c'est vrai. 💙",
+/* 3 avril  */ "Ton corps t'a portée jusqu'ici. Il mérite un peu d'amour en retour. 💖",
+/* 4 avril  */ "Moins de clopes = plus de souffle pour célébrer tes victoires. Logique, non ? 🎉",
+/* 5 avril  */ "Une routine le matin c'est comme un GPS pour ta journée. Sinon tu te perds dans Instagram. 📱",
+/* 6 avril  */ "Cocher une case libère de la dopamine. C'est scientifique. Alors COCHE. ✅",
+/* 7 avril  */ "Tu n'es pas en retard. Tu commences exactement quand il le fallait. 🕐",
+/* 8 avril  */ "Ton futur self te regarde depuis 2027. Il(elle) est fier(e). Et vraiment beau(belle). ✨",
+/* 9 avril  */ "Les habitudes se construisent comme IKEA : une pièce à la fois, et parfois ça énerve un peu. 😅",
+/* 10 avril */ "Aujourd'hui : faire de son mieux. Demain : idem. Après-demain : idem. C'est ça le game.",
+/* 11 avril */ "Le sport c'est pas forcément la salle. Marcher jusqu'à la boulangerie ça compte. (Ok, un peu. 🥐)",
+/* 12 avril */ "Boire 8 verres d'eau : le hack santé le moins cher de l'univers. Et toi t'as les moyens. 💰",
+/* 13 avril */ "Une cigarette de moins = 5 minutes de vie gagnées. Mets-les dans ta tirelire mentale. 🏦",
+/* 14 avril */ "Routine soir = préparer la version reposée et lumineuse de toi pour demain. 🌙",
+/* 15 avril */ "Si Beyoncé avait les mêmes 24h, elle aurait aussi des jours mous. Mais elle se lèverait quand même.",
+/* 16 avril */ "LA PROGRESSION > LA PERFECTION. T'as entendu ? LA PROGRESSION > LA PERFECTION. 🏆",
+/* 17 avril */ "Ton cerveau récompense les petites victoires. Donne-lui ce qu'il veut. 🧠✨",
+/* 18 avril */ "Dormir 7h c'est pas de la flemme. C'est de la haute performance. Reframe ça, vite. 😴💪",
+/* 19 avril */ "T'as 5 équipes actives, un Sales OS et ce journal ouvert. Tu gères. Sérieusement. 🦁",
+/* 20 avril */ "Le mantra du jour : je me choisis. Pas pour être parfaite. Juste pour être moi. 💕",
+/* 21 avril */ "Discipline = liberté. Pas juste un truc de coach LinkedIn. Pour de vrai. 🔑",
+/* 22 avril */ "Chaque matin est un reset gratuit. Et celui-là, il est pour toi. 🌅",
+/* 23 avril */ "Sport = anti-stress + meilleur mood + meilleur sommeil. C'est le pack complet. 🎁",
+/* 24 avril */ "Hydratée → concentrée → performante → fière. La chaîne gagnante de ta journée. 💧➡️🏆",
+/* 25 avril */ "Moins de clopes aujourd'hui = demain tu respires mieux pendant un call. Connexion directe. 📞",
+/* 26 avril */ "Ta routine matin c'est ton armure. Enfile-la avant de partir au combat. ⚔️",
+/* 27 avril */ "Finir la journée avec ce journal rempli = te dire bonne nuit à toi-même. Dors bien. 🌙",
+/* 28 avril */ "T'as quasiment tenu tout le mois. C'est déjà énorme. Vraiment.",
+/* 29 avril */ "Presque fin de mois. Ce que t'as semé ce mois-ci... tu vas le récolter. 🌱",
+/* 30 avril */ "Dernier jour du mois. Pas la fin — juste le début de ce que t'as construit. 🌟"
+];
+
+/* =========================================================
+   STATE & STORAGE
+   ========================================================= */
+let curIdx = 0;
+let toastTmr = null;
+let saveTmr  = null;
+
+function key(date) {
+  return `juju_${date.getFullYear()}_${date.getMonth()}_${date.getDate()}`;
+}
+function load(date) {
+  try { return JSON.parse(localStorage.getItem(key(date))) || {}; }
+  catch { return {}; }
+}
+function save(date, data) {
+  localStorage.setItem(key(date), JSON.stringify(data));
+  showToast();
+}
+function patch(field, val) {
+  const d = DAYS[curIdx];
+  const data = load(d);
+  data[field] = val;
+  save(d, data);
+  refreshProgress(data);
+  refreshDots();
+  refreshStreak();
+}
+
+/* =========================================================
+   TOAST
+   ========================================================= */
+function showToast() {
+  const el = document.getElementById('toast');
+  el.classList.add('show');
+  clearTimeout(toastTmr);
+  toastTmr = setTimeout(() => el.classList.remove('show'), 1500);
+}
+
+/* =========================================================
+   FIELD SAVE (debounced)
+   ========================================================= */
+function saveField(field, val) {
+  clearTimeout(saveTmr);
+  saveTmr = setTimeout(() => patch(field, val), 400);
+}
+
+/* =========================================================
+   NAVIGATION
+   ========================================================= */
+function go(dir) {
+  const n = curIdx + dir;
+  if (n < 0 || n >= DAYS.length) return;
+  curIdx = n;
+  renderDay();
+  syncMonthTab();
+  scrollDotVisible(curIdx);
+}
+
+function jumpTo(idx) {
+  curIdx = idx;
+  renderDay();
+  syncMonthTab();
+}
+
+function switchMonth(m) {
+  const tgt = m === 'mars' ? 2 : 3;
+  const idx = DAYS.findIndex(d => d.getMonth() === tgt);
+  if (idx >= 0) { curIdx = idx; renderDay(); scrollDotVisible(idx); }
+  syncMonthTab();
+}
+
+function syncMonthTab() {
+  const m = DAYS[curIdx].getMonth() === 2 ? 'mars' : 'avril';
+  document.getElementById('tab-mars').classList.toggle('active',  m === 'mars');
+  document.getElementById('tab-avril').classList.toggle('active', m === 'avril');
+}
+
+/* =========================================================
+   DOTS
+   ========================================================= */
+function buildDots() {
+  const strip = document.getElementById('dotStrip');
+  strip.innerHTML = '';
+  const today = todayNorm();
+  DAYS.forEach((d, i) => {
+    const data = load(d);
+    const pct  = progress(data);
+    const el   = document.createElement('div');
+    el.className = 'day-dot';
+    el.dataset.di = i;
+    const isToday  = d.getTime() === today.getTime();
+    const isActive = i === curIdx;
+    const isDone   = pct >= 55 && d < today && !isActive;
+    if (isActive) el.classList.add('is-active');
+    else if (isDone) el.classList.add('is-done');
+    else if (isToday) el.classList.add('is-today');
+    el.innerHTML = `<div class="d-circle">${isDone ? '' : d.getDate()}</div>
+                    <div class="d-label">${DAY_FR[d.getDay()].slice(0,2)}</div>`;
+    el.onclick = () => jumpTo(i);
+    strip.appendChild(el);
+  });
+}
+
+function refreshDots() {
+  const today = todayNorm();
+  document.querySelectorAll('.day-dot').forEach((el, i) => {
+    const d     = DAYS[i];
+    const data  = load(d);
+    const pct   = progress(data);
+    const isActive = i === curIdx;
+    const isToday  = d.getTime() === today.getTime();
+    const isDone   = pct >= 55 && d < today && !isActive;
+    el.className = 'day-dot' +
+      (isActive ? ' is-active' : isDone ? ' is-done' : isToday ? ' is-today' : '');
+    const circle = el.querySelector('.d-circle');
+    circle.textContent = isDone ? '' : d.getDate();
+  });
+}
+
+function scrollDotVisible(idx) {
+  const el = document.querySelector(`.day-dot[data-di="${idx}"]`);
+  if (el) el.scrollIntoView({ behavior:'smooth', inline:'center', block:'nearest' });
+}
+
+/* =========================================================
+   RENDER DAY
+   ========================================================= */
+function renderDay() {
+  const d    = DAYS[curIdx];
+  const data = load(d);
+
+  // Header
+  document.getElementById('dhLabel').textContent = DAY_FR[d.getDay()];
+  document.getElementById('dhNum').textContent   = d.getDate();
+  document.getElementById('dhMonth').textContent = `${MON_FR[d.getMonth()]} ${d.getFullYear()}`;
+
+  // Mantra
+  document.getElementById('mantraEl').textContent = MANTRAS[curIdx] || '✨ C\'est une nouvelle journée. Make it count.';
+
+  // Nav buttons
+  document.getElementById('prevBtn').disabled = curIdx === 0;
+  document.getElementById('nextBtn').disabled = curIdx === DAYS.length - 1;
+
+  // Checkboxes
+  document.querySelectorAll('.ck-item[data-key]').forEach(el => {
+    el.classList.toggle('is-checked', !!data[el.dataset.key]);
+  });
+
+  // Text fields
+  [['t_matin_feeling','matin_feeling'],['t_hydra_note','hydra_note'],
+   ['t_sport_quoi','sport_quoi'],['t_work_win','work_win'],
+   ['t_fiere','fiere'],['t_amelio','amelio'],['t_libre','libre'],
+   ['t_sleep_bed','sleep_bed'],['t_sleep_wake','sleep_wake']
+  ].forEach(([id,fk]) => {
+    const el = document.getElementById(id);
+    if (el) el.value = data[fk] || '';
+  });
+
+  // Water
+  const w = data.water || [];
+  document.querySelectorAll('.w-drop').forEach((el,i) =>
+    el.classList.toggle('on', !!w[i])
+  );
+  renderWaterMsg((w.filter(Boolean).length));
+
+  // Smoke
+  const smk = data.smoke || 0;
+  document.getElementById('smokeNum').textContent = smk;
+  renderSmokeMsg(smk);
+
+  // Intensity
+  document.querySelectorAll('.int-btn').forEach(el =>
+    el.classList.toggle('on', el.dataset.iv === data.sport_int)
+  );
+
+  // Sleep
+  calcSleep();
+
+  // Mood
+  document.querySelectorAll('.mood-btn').forEach(el =>
+    el.classList.toggle('on', el.dataset.mood === data.mood)
+  );
+
+  // Dots highlight
+  refreshDots();
+  refreshProgress(data);
+}
+
+/* =========================================================
+   CHECKBOXES
+   ========================================================= */
+document.querySelectorAll('.ck-item[data-key]').forEach(el => {
+  el.addEventListener('click', () => {
+    const was = el.classList.contains('is-checked');
+    el.classList.toggle('is-checked', !was);
+    patch(el.dataset.key, !was);
+  });
+});
+
+/* =========================================================
+   WATER
+   ========================================================= */
+function toggleWater(i) {
+  const d    = DAYS[curIdx];
+  const data = load(d);
+  if (!data.water) data.water = Array(8).fill(false);
+  data.water[i] = !data.water[i];
+  save(d, data);
+  document.querySelectorAll('.w-drop').forEach((el,j) =>
+    el.classList.toggle('on', !!data.water[j])
+  );
+  const cnt = data.water.filter(Boolean).length;
+  renderWaterMsg(cnt);
+  refreshProgress(data);
+  refreshDots();
+  refreshStreak();
+}
+
+function renderWaterMsg(n) {
+  const msgs = ['','C\'est un début ! 🌱','Déjà 2, bien ! 💪','Halfway ! 🔥',
+    'Plus que la moitié ! ✨','Super ! Continue 💧','Presque ! 🎯',
+    'Encore un petit effort ! 🌊','OBJECTIF ATTEINT 🏆🎉'];
+  document.getElementById('waterMsg').textContent = n > 0 ? `${n}/8 verres — ${msgs[n]||''}` : '';
+}
+
+/* =========================================================
+   SMOKE
+   ========================================================= */
+function adjSmoke(v) {
+  const d    = DAYS[curIdx];
+  const data = load(d);
+  data.smoke = Math.max(0, (data.smoke||0) + v);
+  save(d, data);
+  document.getElementById('smokeNum').textContent = data.smoke;
+  renderSmokeMsg(data.smoke);
+  refreshProgress(data);
+  refreshDots();
+  refreshStreak();
+}
+
+function renderSmokeMsg(n) {
+  const el = document.getElementById('smokeMsg');
+  el.className = 'sm-msg show';
+  if (n === 0) {
+    el.textContent = '🎉 ZÉRO ! T\'es une reine aujourd\'hui.';
+    el.classList.add('sm-great');
+  } else if (n <= 3) {
+    el.textContent = `💪 ${n} seulement. Tu réduis — c'est ça le chemin.`;
+    el.className = 'sm-msg show sm-good';
+  } else if (n <= 7) {
+    el.textContent = `👀 ${n}… On peut faire mieux demain. T'as les ressources.`;
+    el.className = 'sm-msg show sm-ok';
+  } else {
+    el.textContent = `🫂 Journée difficile. Demain, enlèves-en juste une. C'est tout.`;
+    el.className = 'sm-msg show sm-bad';
+  }
+}
+
+/* =========================================================
+   INTENSITY
+   ========================================================= */
+function setInt(v, el) {
+  document.querySelectorAll('.int-btn').forEach(b => b.classList.remove('on'));
+  el.classList.add('on');
+  patch('sport_int', v);
+}
+
+/* =========================================================
+   SLEEP CALC
+   ========================================================= */
+function calcSleep() {
+  const bed  = document.getElementById('t_sleep_bed').value;
+  const wake = document.getElementById('t_sleep_wake').value;
+  const el   = document.getElementById('sleepRes');
+  if (!bed || !wake) { el.textContent = ''; return; }
+  const [bh,bm] = bed.split(':').map(Number);
+  const [wh,wm] = wake.split(':').map(Number);
+  let mins = (wh*60+wm) - (bh*60+bm);
+  if (mins < 0) mins += 1440;
+  const h = Math.floor(mins/60), m = mins%60;
+  const ico = h >= 7 ? '😴✨' : h >= 6 ? '🙂' : h >= 5 ? '😐' : '😫';
+  el.textContent = `${ico}  ${h}h${m > 0 ? m+'min' : ''} de sommeil`;
+}
+
+/* =========================================================
+   MOOD
+   ========================================================= */
+function setMood(emoji, el) {
+  document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('on'));
+  el.classList.add('on');
+  patch('mood', emoji);
+}
+
+/* =========================================================
+   PROGRESS
+   ========================================================= */
+const CK_KEYS = ['m_snooze','m_tel','m_eau','m_skin','m_calme',
+                 's_fait','s_resist',
+                 'w_todo','w_calls','w_focus',
+                 'e_diner','e_ecran','e_calme'];
+const TX_KEYS = ['matin_feeling','sport_quoi','work_win','fiere'];
+
+function progress(data) {
+  let done = 0, total = CK_KEYS.length + TX_KEYS.length + 1; // +1 mood
+  CK_KEYS.forEach(k => { if (data[k]) done++; });
+  TX_KEYS.forEach(k => { if (data[k]?.trim()) done++; });
+  if (data.mood) done++;
+  const w = (data.water||[]).filter(Boolean).length;
+  done  += Math.min(w, 4); total += 4;
+  return Math.round((done/total)*100);
+}
+
+function refreshProgress(data) {
+  const pct = progress(data);
+  document.getElementById('progFill').style.width = `${pct}%`;
+  document.getElementById('progTxt').textContent  = `${pct} %`;
+}
+
+/* =========================================================
+   STREAK
+   ========================================================= */
+function todayNorm() {
+  const t = new Date(); t.setHours(0,0,0,0); return t;
+}
+
+function refreshStreak() {
+  const today = todayNorm();
+  let streak = 0;
+  for (let i = DAYS.length-1; i >= 0; i--) {
+    const d = DAYS[i];
+    if (d > today) continue;
+    if (progress(load(d)) >= 30) streak++;
+    else break;
+  }
+  document.getElementById('streakEl').textContent = `🔥 ${streak}j`;
+}
+
+/* =========================================================
+   INIT
+   ========================================================= */
+function init() {
+  const today = todayNorm();
+  let idx = DAYS.findIndex(d => { const x=new Date(d); x.setHours(0,0,0,0); return x.getTime()===today.getTime(); });
+  if (idx === -1) idx = today < DAYS[0] ? 0 : DAYS.length-1;
+  curIdx = idx;
+
+  buildDots();
+  renderDay();
+  syncMonthTab();
+  refreshStreak();
+  setTimeout(() => scrollDotVisible(curIdx), 150);
+}
+
+init();
+</script>
+</body>
+</html>
