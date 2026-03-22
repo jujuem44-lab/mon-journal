@@ -458,7 +458,25 @@ body {
     <button class="month-tab" id="tab-mars"  onclick="switchMonth('mars')">Mars</button>
     <button class="month-tab" id="tab-avril" onclick="switchMonth('avril')">Avril</button>
   </div>
-  <div class="streak-pill" id="streakEl">🔥 0j</div>
+  <div style="display:flex;align-items:center;gap:8px;">
+    <div class="streak-pill" id="streakEl">🔥 0j</div>
+    <button onclick="toggleSettings()" style="width:34px;height:34px;border-radius:50%;border:2px solid var(--pink-l);background:var(--white);font-size:.95rem;cursor:pointer;" title="Réglages">⚙️</button>
+  </div>
+</div>
+
+<!-- SETTINGS MODAL -->
+<div id="settingsModal" style="display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.25);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:20px;">
+  <div style="background:var(--white);border-radius:20px;padding:24px;width:100%;max-width:360px;box-shadow:0 12px 40px rgba(255,107,138,.18);border:2px solid var(--pink-l);">
+    <div style="font-family:'Fraunces',serif;font-size:1.1rem;font-weight:700;color:var(--pink);margin-bottom:16px;">⚙️ Réglages sync</div>
+    <div style="font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--text-mid);margin-bottom:6px;">Token Airtable</div>
+    <input type="password" id="atTokenInput" placeholder="patXXXX..." style="width:100%;padding:10px 13px;border:2px solid var(--pink-l);border-radius:10px;font-family:'Nunito',sans-serif;font-size:.85rem;background:var(--cream);outline:none;color:var(--text);">
+    <div style="font-size:.72rem;color:var(--text-soft);margin-top:5px;font-style:italic;">Stocké localement — jamais dans le code GitHub.</div>
+    <div id="atSyncStatus" style="margin-top:12px;padding:9px 13px;border-radius:10px;font-size:.8rem;font-weight:600;display:none;"></div>
+    <div style="display:flex;gap:10px;margin-top:16px;">
+      <button onclick="saveAtToken()" style="flex:1;padding:10px;background:linear-gradient(135deg,var(--pink),var(--pink-d));color:white;border:none;border-radius:10px;font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:800;cursor:pointer;">Enregistrer</button>
+      <button onclick="toggleSettings()" style="padding:10px 16px;border:2px solid var(--pink-l);background:var(--white);border-radius:10px;font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:700;cursor:pointer;color:var(--text-mid);">Fermer</button>
+    </div>
+  </div>
 </div>
 
 <!-- DOT STRIP -->
@@ -684,9 +702,105 @@ body {
 
 <script>
 /* =========================================================
+   AIRTABLE SYNC
+   Base: appITdhAzHBgYWW1e / Table: tblz3cnfFrFl27758
+   ========================================================= */
+const AT_BASE  = 'appITdhAzHBgYWW1e';
+const AT_TABLE = 'tblz3cnfFrFl27758';
+const AT_FIELDS = {
+  date:       'fldGybdmvyh2RtiT7',
+  mood:       'fldehm2kKEokwDu7m',
+  water:      'flddlQGGkJ8OW06wz',
+  smoke:      'fldb3nqkPnkKnpzZq',
+  progress:   'fldDUIDdK2Cret8XK',
+  sport:      'fldTi60Pp7aHCR2Zt',
+  feeling:    'fldyLj8TuyozprMbg',
+  win:        'fld2l1KGaHgDDWtTV',
+  fierte:     'fldFGlD73wQSy98OE',
+  amelio:     'fldS1o033IJszawa7',
+  bedtime:    'fldC4csHl98vDciB6',
+  waketime:   'fldkLHSO91LHI7Brp'
+};
+
+function getAtToken() { return localStorage.getItem('journal_at_token') || ''; }
+
+function saveAtToken() {
+  const val = document.getElementById('atTokenInput').value.trim();
+  if (!val) return;
+  localStorage.setItem('journal_at_token', val);
+  showAtStatus('✅ Token enregistré — sync activée !', '#D0F0E0', '#1D7A50');
+}
+
+function toggleSettings() {
+  const m = document.getElementById('settingsModal');
+  const isOpen = m.style.display === 'flex';
+  m.style.display = isOpen ? 'none' : 'flex';
+  if (!isOpen) {
+    const tok = getAtToken();
+    const inp = document.getElementById('atTokenInput');
+    inp.value = tok ? '••••••••••••' : '';
+    const st = document.getElementById('atSyncStatus');
+    if (tok) {
+      showAtStatus('✅ Token configuré — sync active', '#D0F0E0', '#1D7A50');
+    } else {
+      st.style.display = 'none';
+    }
+  }
+}
+
+function showAtStatus(msg, bg, color) {
+  const el = document.getElementById('atSyncStatus');
+  el.style.display = 'block';
+  el.style.background = bg || '#FFF0F4';
+  el.style.color = color || 'var(--pink)';
+  el.textContent = msg;
+}
+
+let atSyncTimer = null;
+function scheduleSyncToAirtable() {
+  clearTimeout(atSyncTimer);
+  atSyncTimer = setTimeout(() => syncDayToAirtable(DAYS[curIdx]), 1200);
+}
+
+async function syncDayToAirtable(date) {
+  const token = getAtToken();
+  if (!token || token === '••••••••••••') return;
+  const data = load(date);
+  const dateStr = `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;
+  const fields = {};
+  fields[AT_FIELDS.date]     = dateStr;
+  fields[AT_FIELDS.mood]     = data.mood || '';
+  fields[AT_FIELDS.water]    = (data.water||[]).filter(Boolean).length;
+  fields[AT_FIELDS.smoke]    = data.smoke || 0;
+  fields[AT_FIELDS.progress] = progress(data);
+  fields[AT_FIELDS.sport]    = data.sport_quoi || '';
+  fields[AT_FIELDS.feeling]  = data.matin_feeling || '';
+  fields[AT_FIELDS.win]      = data.work_win || '';
+  fields[AT_FIELDS.fierte]   = data.fiere || '';
+  fields[AT_FIELDS.amelio]   = data.amelio || '';
+  fields[AT_FIELDS.bedtime]  = data.sleep_bed || '';
+  fields[AT_FIELDS.waketime] = data.sleep_wake || '';
+
+  try {
+    const res = await fetch(`https://api.airtable.com/v0/${AT_BASE}/${AT_TABLE}`, {
+      method: 'PATCH',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        performUpsert: { fieldsToMergeOn: [AT_FIELDS.date] },
+        records: [{ fields }]
+      })
+    });
+    if (!res.ok) { console.warn('Airtable sync failed', res.status); }
+  } catch(e) { console.warn('Airtable sync error', e); }
+}
+
+/* =========================================================
    LOGIN
    ========================================================= */
-const PASSWORD    = 'JUJU1506';
+const PASSWORD    = 'Juju2026✨';
 const SESSION_KEY = 'journal_auth_v1';
 
 function doLogin() {
@@ -798,6 +912,7 @@ function patch(field, val) {
   refreshProgress(data);
   refreshDots();
   refreshStreak();
+  scheduleSyncToAirtable();
 }
 
 /* =========================================================
