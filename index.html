@@ -702,133 +702,6 @@ body {
 
 <script>
 /* =========================================================
-   AIRTABLE SYNC
-   Base: appITdhAzHBgYWW1e / Table: tblz3cnfFrFl27758
-   ========================================================= */
-const AT_BASE  = 'appITdhAzHBgYWW1e';
-const AT_TABLE = 'tblz3cnfFrFl27758';
-const AT_FIELDS = {
-  date:       'fldGybdmvyh2RtiT7',
-  mood:       'fldehm2kKEokwDu7m',
-  water:      'flddlQGGkJ8OW06wz',
-  smoke:      'fldb3nqkPnkKnpzZq',
-  progress:   'fldDUIDdK2Cret8XK',
-  sport:      'fldTi60Pp7aHCR2Zt',
-  feeling:    'fldyLj8TuyozprMbg',
-  win:        'fld2l1KGaHgDDWtTV',
-  fierte:     'fldFGlD73wQSy98OE',
-  amelio:     'fldS1o033IJszawa7',
-  bedtime:    'fldC4csHl98vDciB6',
-  waketime:   'fldkLHSO91LHI7Brp'
-};
-
-function getAtToken() { return localStorage.getItem('journal_at_token') || ''; }
-
-function saveAtToken() {
-  const val = document.getElementById('atTokenInput').value.trim();
-  if (!val) return;
-  localStorage.setItem('journal_at_token', val);
-  showAtStatus('✅ Token enregistré — sync activée !', '#D0F0E0', '#1D7A50');
-}
-
-function toggleSettings() {
-  const m = document.getElementById('settingsModal');
-  const isOpen = m.style.display === 'flex';
-  m.style.display = isOpen ? 'none' : 'flex';
-  if (!isOpen) {
-    const tok = getAtToken();
-    const inp = document.getElementById('atTokenInput');
-    inp.value = tok ? '••••••••••••' : '';
-    const st = document.getElementById('atSyncStatus');
-    if (tok) {
-      showAtStatus('✅ Token configuré — sync active', '#D0F0E0', '#1D7A50');
-    } else {
-      st.style.display = 'none';
-    }
-  }
-}
-
-function showAtStatus(msg, bg, color) {
-  const el = document.getElementById('atSyncStatus');
-  el.style.display = 'block';
-  el.style.background = bg || '#FFF0F4';
-  el.style.color = color || 'var(--pink)';
-  el.textContent = msg;
-}
-
-let atSyncTimer = null;
-function scheduleSyncToAirtable() {
-  clearTimeout(atSyncTimer);
-  atSyncTimer = setTimeout(() => syncDayToAirtable(DAYS[curIdx]), 1200);
-}
-
-async function syncDayToAirtable(date) {
-  const token = getAtToken();
-  if (!token || token === '••••••••••••') return;
-  const data = load(date);
-  const dateStr = `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;
-  const fields = {};
-  fields[AT_FIELDS.date]     = dateStr;
-  fields[AT_FIELDS.mood]     = data.mood || '';
-  fields[AT_FIELDS.water]    = (data.water||[]).filter(Boolean).length;
-  fields[AT_FIELDS.smoke]    = data.smoke || 0;
-  fields[AT_FIELDS.progress] = progress(data);
-  fields[AT_FIELDS.sport]    = data.sport_quoi || '';
-  fields[AT_FIELDS.feeling]  = data.matin_feeling || '';
-  fields[AT_FIELDS.win]      = data.work_win || '';
-  fields[AT_FIELDS.fierte]   = data.fiere || '';
-  fields[AT_FIELDS.amelio]   = data.amelio || '';
-  fields[AT_FIELDS.bedtime]  = data.sleep_bed || '';
-  fields[AT_FIELDS.waketime] = data.sleep_wake || '';
-
-  try {
-    const res = await fetch(`https://api.airtable.com/v0/${AT_BASE}/${AT_TABLE}`, {
-      method: 'PATCH',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        performUpsert: { fieldsToMergeOn: [AT_FIELDS.date] },
-        records: [{ fields }]
-      })
-    });
-    if (!res.ok) { console.warn('Airtable sync failed', res.status); }
-  } catch(e) { console.warn('Airtable sync error', e); }
-}
-
-/* =========================================================
-   LOGIN
-   ========================================================= */
-const PASSWORD    = 'Juju2026✨';
-const SESSION_KEY = 'journal_auth_v1';
-
-function doLogin() {
-  const input = document.getElementById('pwdInput');
-  const errEl = document.getElementById('loginError');
-  if (input.value === PASSWORD) {
-    sessionStorage.setItem(SESSION_KEY, '1');
-    document.getElementById('loginScreen').style.display = 'none';
-    document.getElementById('app').style.display = 'block';
-    init();
-  } else {
-    input.classList.add('error');
-    errEl.textContent = 'Mot de passe incorrect 🙅‍♀️';
-    input.value = '';
-    setTimeout(() => { input.classList.remove('error'); errEl.textContent = ''; }, 1800);
-  }
-}
-document.getElementById('pwdInput').addEventListener('keydown', e => {
-  if (e.key === 'Enter') doLogin();
-});
-
-// Déjà authentifiée dans cette session ?
-if (sessionStorage.getItem(SESSION_KEY) === '1') {
-  document.getElementById('loginScreen').style.display = 'none';
-  document.getElementById('app').style.display = 'block';
-  init();
-}
-/* =========================================================
    DAYS
    ========================================================= */
 const DAYS = [];
@@ -1240,6 +1113,135 @@ function init() {
   setTimeout(() => scrollDotVisible(curIdx), 150);
 }
 
+
+
+/* =========================================================
+   AIRTABLE SYNC
+   Base: appITdhAzHBgYWW1e / Table: tblz3cnfFrFl27758
+   ========================================================= */
+const AT_BASE  = 'appITdhAzHBgYWW1e';
+const AT_TABLE = 'tblz3cnfFrFl27758';
+const AT_FIELDS = {
+  date:       'fldGybdmvyh2RtiT7',
+  mood:       'fldehm2kKEokwDu7m',
+  water:      'flddlQGGkJ8OW06wz',
+  smoke:      'fldb3nqkPnkKnpzZq',
+  progress:   'fldDUIDdK2Cret8XK',
+  sport:      'fldTi60Pp7aHCR2Zt',
+  feeling:    'fldyLj8TuyozprMbg',
+  win:        'fld2l1KGaHgDDWtTV',
+  fierte:     'fldFGlD73wQSy98OE',
+  amelio:     'fldS1o033IJszawa7',
+  bedtime:    'fldC4csHl98vDciB6',
+  waketime:   'fldkLHSO91LHI7Brp'
+};
+
+function getAtToken() { return localStorage.getItem('journal_at_token') || ''; }
+
+function saveAtToken() {
+  const val = document.getElementById('atTokenInput').value.trim();
+  if (!val) return;
+  localStorage.setItem('journal_at_token', val);
+  showAtStatus('✅ Token enregistré — sync activée !', '#D0F0E0', '#1D7A50');
+}
+
+function toggleSettings() {
+  const m = document.getElementById('settingsModal');
+  const isOpen = m.style.display === 'flex';
+  m.style.display = isOpen ? 'none' : 'flex';
+  if (!isOpen) {
+    const tok = getAtToken();
+    const inp = document.getElementById('atTokenInput');
+    inp.value = tok ? '••••••••••••' : '';
+    const st = document.getElementById('atSyncStatus');
+    if (tok) {
+      showAtStatus('✅ Token configuré — sync active', '#D0F0E0', '#1D7A50');
+    } else {
+      st.style.display = 'none';
+    }
+  }
+}
+
+function showAtStatus(msg, bg, color) {
+  const el = document.getElementById('atSyncStatus');
+  el.style.display = 'block';
+  el.style.background = bg || '#FFF0F4';
+  el.style.color = color || 'var(--pink)';
+  el.textContent = msg;
+}
+
+let atSyncTimer = null;
+function scheduleSyncToAirtable() {
+  clearTimeout(atSyncTimer);
+  atSyncTimer = setTimeout(() => syncDayToAirtable(DAYS[curIdx]), 1200);
+}
+
+async function syncDayToAirtable(date) {
+  const token = getAtToken();
+  if (!token || token === '••••••••••••') return;
+  const data = load(date);
+  const dateStr = `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;
+  const fields = {};
+  fields[AT_FIELDS.date]     = dateStr;
+  fields[AT_FIELDS.mood]     = data.mood || '';
+  fields[AT_FIELDS.water]    = (data.water||[]).filter(Boolean).length;
+  fields[AT_FIELDS.smoke]    = data.smoke || 0;
+  fields[AT_FIELDS.progress] = progress(data);
+  fields[AT_FIELDS.sport]    = data.sport_quoi || '';
+  fields[AT_FIELDS.feeling]  = data.matin_feeling || '';
+  fields[AT_FIELDS.win]      = data.work_win || '';
+  fields[AT_FIELDS.fierte]   = data.fiere || '';
+  fields[AT_FIELDS.amelio]   = data.amelio || '';
+  fields[AT_FIELDS.bedtime]  = data.sleep_bed || '';
+  fields[AT_FIELDS.waketime] = data.sleep_wake || '';
+
+  try {
+    const res = await fetch(`https://api.airtable.com/v0/${AT_BASE}/${AT_TABLE}`, {
+      method: 'PATCH',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        performUpsert: { fieldsToMergeOn: [AT_FIELDS.date] },
+        records: [{ fields }]
+      })
+    });
+    if (!res.ok) { console.warn('Airtable sync failed', res.status); }
+  } catch(e) { console.warn('Airtable sync error', e); }
+}
+
+
+/* =========================================================
+   LOGIN
+   ========================================================= */
+const PASSWORD    = 'Juju2026✨';
+const SESSION_KEY = 'journal_auth_v1';
+
+function doLogin() {
+  const input = document.getElementById('pwdInput');
+  const errEl = document.getElementById('loginError');
+  if (input.value === PASSWORD) {
+    sessionStorage.setItem(SESSION_KEY, '1');
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    init();
+  } else {
+    input.classList.add('error');
+    errEl.textContent = 'Mot de passe incorrect 🙅‍♀️';
+    input.value = '';
+    setTimeout(() => { input.classList.remove('error'); errEl.textContent = ''; }, 1800);
+  }
+}
+document.getElementById('pwdInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') doLogin();
+});
+
+if (sessionStorage.getItem(SESSION_KEY) === '1') {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  init();
+}
 </script>
 </body>
 </html>
