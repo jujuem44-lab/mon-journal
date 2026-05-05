@@ -7,430 +7,147 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,300;1,9..144,500&family=Nunito:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root {
-  --cream:       #FFF8F2;
-  --white:       #FFFFFF;
-  --pink:        #FF6B8A;
-  --pink-l:      #FFE0E8;
-  --pink-ll:     #FFF0F4;
-  --pink-d:      #D94F6D;
-  --amber:       #FFAD3B;
-  --amber-l:     #FFF0D0;
-  --teal:        #5EC4C4;
-  --teal-l:      #D0EEEE;
-  --mint:        #72D0A0;
-  --mint-l:      #D0F0E0;
-  --lilac:       #C49FE0;
-  --lilac-l:     #EEE0FF;
-  --text:        #252525;
-  --text-mid:    #666;
-  --text-soft:   #AAA;
-  --border:      #F0E4DC;
-  --shadow:      0 4px 24px rgba(255,107,138,.09);
-  --shadow-lg:   0 8px 36px rgba(255,107,138,.14);
+  --cream:#FFF8F2;--white:#FFFFFF;--pink:#FF6B8A;--pink-l:#FFE0E8;--pink-ll:#FFF0F4;
+  --pink-d:#D94F6D;--amber:#FFAD3B;--amber-l:#FFF0D0;--teal:#5EC4C4;--teal-l:#D0EEEE;
+  --mint:#72D0A0;--mint-l:#D0F0E0;--lilac:#C49FE0;--lilac-l:#EEE0FF;
+  --text:#252525;--text-mid:#666;--text-soft:#AAA;--border:#F0E4DC;
+  --shadow:0 4px 24px rgba(255,107,138,.09);--shadow-lg:0 8px 36px rgba(255,107,138,.14);
 }
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--cream);font-family:'Nunito',sans-serif;color:var(--text);min-height:100dvh;-webkit-tap-highlight-color:transparent;}
 
-*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+/* LOGIN */
+#loginScreen{min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;padding:24px;background:linear-gradient(160deg,#FFF0F4 0%,#FFF8F2 60%,#FFF0E0 100%);}
+.login-avatar{width:100px;height:100px;border-radius:50%;object-fit:cover;object-position:center top;border:4px solid var(--pink-l);box-shadow:0 6px 24px rgba(255,107,138,.22);}
+.login-title{font-family:'Fraunces',serif;font-size:1.6rem;font-weight:700;color:var(--pink);text-align:center;line-height:1.2;}
+.login-sub{font-size:.82rem;color:var(--text-mid);text-align:center;margin-top:4px;font-style:italic;}
+.login-box{background:var(--white);border:2px solid var(--pink-l);border-radius:20px;padding:28px 24px;width:100%;max-width:320px;display:flex;flex-direction:column;gap:14px;box-shadow:0 8px 32px rgba(255,107,138,.12);}
+.login-label{font-size:.7rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--text-mid);}
+.login-input{width:100%;padding:12px 16px;border:2px solid var(--pink-l);border-radius:12px;font-family:'Nunito',sans-serif;font-size:1rem;color:var(--text);background:var(--cream);outline:none;transition:border-color .2s;}
+.login-input:focus{border-color:var(--pink);background:var(--white);}
+.login-input.error{border-color:#F05050;background:#FFF0F0;}
+.login-btn{width:100%;padding:13px;background:linear-gradient(135deg,var(--pink),var(--pink-d));color:white;border:none;border-radius:12px;font-family:'Nunito',sans-serif;font-size:.95rem;font-weight:800;cursor:pointer;transition:opacity .2s,transform .1s;box-shadow:0 4px 14px rgba(255,107,138,.35);}
+.login-btn:hover{opacity:.9;}
+.login-btn:active{transform:scale(.97);}
+.login-error{font-size:.78rem;color:#D03030;text-align:center;font-weight:700;min-height:18px;}
+#app{display:none;}
 
-body {
-  background: var(--cream);
-  font-family: 'Nunito', sans-serif;
-  color: var(--text);
-  min-height: 100dvh;
-  -webkit-tap-highlight-color: transparent;
-}
+/* TOP BAR */
+.top-bar{position:sticky;top:0;z-index:200;background:var(--white);border-bottom:2px solid var(--pink-l);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 16px rgba(255,107,138,.08);}
+.app-logo{font-family:'Fraunces',serif;font-size:1.15rem;font-weight:700;color:var(--pink);display:flex;align-items:center;gap:6px;}
+.month-tabs{display:flex;gap:4px;}
+.month-tab{padding:5px 10px;border-radius:20px;border:2px solid var(--pink-l);background:var(--white);color:var(--text-mid);font-family:'Nunito',sans-serif;font-size:.75rem;font-weight:700;cursor:pointer;transition:all .2s;}
+.month-tab.active{background:var(--pink);border-color:var(--pink);color:white;}
+.streak-pill{background:linear-gradient(135deg,var(--amber),#FF8C42);color:white;padding:4px 11px;border-radius:20px;font-size:.78rem;font-weight:800;box-shadow:0 2px 8px rgba(255,173,59,.3);}
 
-/* ───── TOP BAR ───── */
-.top-bar {
-  position: sticky; top: 0; z-index: 200;
-  background: var(--white);
-  border-bottom: 2px solid var(--pink-l);
-  padding: 10px 16px;
-  display: flex; align-items: center; justify-content: space-between;
-  box-shadow: 0 2px 16px rgba(255,107,138,.08);
-}
-.app-logo {
-  font-family: 'Fraunces', serif;
-  font-size: 1.15rem; font-weight: 700;
-  color: var(--pink);
-  display: flex; align-items: center; gap: 6px;
-}
-.month-tabs { display: flex; gap: 6px; }
-.month-tab {
-  padding: 5px 13px;
-  border-radius: 20px;
-  border: 2px solid var(--pink-l);
-  background: var(--white);
-  color: var(--text-mid);
-  font-family: 'Nunito', sans-serif;
-  font-size: .82rem; font-weight: 700;
-  cursor: pointer; transition: all .2s;
-}
-.month-tab.active { background: var(--pink); border-color: var(--pink); color: white; }
-.streak-pill {
-  background: linear-gradient(135deg, var(--amber), #FF8C42);
-  color: white; padding: 4px 11px;
-  border-radius: 20px; font-size: .78rem; font-weight: 800;
-  box-shadow: 0 2px 8px rgba(255,173,59,.3);
-}
+/* DOT STRIP */
+.dot-strip-wrap{background:var(--white);border-bottom:1px solid var(--border);overflow-x:auto;white-space:nowrap;scrollbar-width:none;}
+.dot-strip-wrap::-webkit-scrollbar{display:none;}
+.dot-strip{display:inline-flex;gap:4px;padding:10px 16px;}
+.day-dot{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;min-width:38px;transition:transform .15s;}
+.day-dot:active{transform:scale(.9);}
+.day-dot .d-circle{width:34px;height:34px;border-radius:50%;border:2px solid var(--border);background:var(--white);display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:700;color:var(--text-soft);transition:all .2s;}
+.day-dot .d-label{font-size:.58rem;text-transform:uppercase;letter-spacing:.5px;color:var(--text-soft);font-weight:600;}
+.day-dot.is-active .d-circle{background:var(--pink);border-color:var(--pink);color:white;transform:scale(1.12);box-shadow:0 3px 10px rgba(255,107,138,.35);}
+.day-dot.is-today:not(.is-active) .d-circle{border-color:var(--pink);color:var(--pink);background:var(--pink-ll);font-weight:900;}
+.day-dot.is-done:not(.is-active) .d-circle{background:var(--mint-l);border-color:var(--mint);color:#2A8C5A;font-size:0;}
+.day-dot.is-done:not(.is-active) .d-circle::after{content:'✓';font-size:.65rem;}
 
-/* ───── DOT STRIP ───── */
-.dot-strip-wrap {
-  background: var(--white);
-  border-bottom: 1px solid var(--border);
-  overflow-x: auto; white-space: nowrap;
-  scrollbar-width: none;
-}
-.dot-strip-wrap::-webkit-scrollbar { display: none; }
-.dot-strip {
-  display: inline-flex; gap: 4px;
-  padding: 10px 16px;
-}
-.day-dot {
-  display: flex; flex-direction: column; align-items: center; gap: 3px;
-  cursor: pointer; min-width: 38px;
-  transition: transform .15s;
-}
-.day-dot:active { transform: scale(.9); }
-.day-dot .d-circle {
-  width: 34px; height: 34px; border-radius: 50%;
-  border: 2px solid var(--border);
-  background: var(--white);
-  display: flex; align-items: center; justify-content: center;
-  font-size: .78rem; font-weight: 700; color: var(--text-soft);
-  transition: all .2s;
-}
-.day-dot .d-label {
-  font-size: .58rem; text-transform: uppercase;
-  letter-spacing: .5px; color: var(--text-soft); font-weight: 600;
-}
-.day-dot.is-active .d-circle {
-  background: var(--pink); border-color: var(--pink);
-  color: white; transform: scale(1.12);
-  box-shadow: 0 3px 10px rgba(255,107,138,.35);
-}
-.day-dot.is-today:not(.is-active) .d-circle {
-  border-color: var(--pink); color: var(--pink); background: var(--pink-ll); font-weight: 900;
-}
-.day-dot.is-done:not(.is-active) .d-circle {
-  background: var(--mint-l); border-color: var(--mint); color: #2A8C5A;
-}
-.day-dot.is-done:not(.is-active) .d-circle::after {
-  content: '✓'; font-size: .65rem;
-}
-.day-dot.is-done:not(.is-active) .d-circle { font-size: 0; }
+/* MAIN */
+.main{max-width:660px;margin:0 auto;padding:20px 14px 100px;}
 
-/* ───── MAIN ───── */
-.main {
-  max-width: 660px; margin: 0 auto;
-  padding: 20px 14px 100px;
-}
+/* DAY NAV */
+.day-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
+.nav-btn{width:42px;height:42px;border-radius:50%;border:2px solid var(--pink-l);background:var(--white);font-size:1rem;cursor:pointer;color:var(--pink);display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;}
+.nav-btn:hover:not(:disabled){background:var(--pink);color:white;border-color:var(--pink);}
+.nav-btn:disabled{opacity:.3;cursor:not-allowed;}
+.day-header{text-align:center;animation:fadeDown .4s ease;}
+.day-header .dh-label{font-family:'Fraunces',serif;font-size:.8rem;font-weight:300;letter-spacing:3px;text-transform:uppercase;color:var(--text-mid);font-style:italic;}
+.day-header .dh-num{font-family:'Fraunces',serif;font-size:2.8rem;font-weight:700;color:var(--pink);line-height:1.05;}
+.day-header .dh-month{font-family:'Fraunces',serif;font-size:1.1rem;font-weight:300;color:var(--text);font-style:italic;}
 
-/* ───── DAY NAV + HEADER ───── */
-.day-nav {
-  display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 18px;
-}
-.nav-btn {
-  width: 42px; height: 42px; border-radius: 50%;
-  border: 2px solid var(--pink-l); background: var(--white);
-  font-size: 1rem; cursor: pointer; color: var(--pink);
-  display: flex; align-items: center; justify-content: center;
-  transition: all .2s; flex-shrink: 0;
-}
-.nav-btn:hover:not(:disabled) { background: var(--pink); color: white; border-color: var(--pink); }
-.nav-btn:disabled { opacity: .3; cursor: not-allowed; }
-.day-header { text-align: center; animation: fadeDown .4s ease; }
-.day-header .dh-label {
-  font-family: 'Fraunces', serif; font-size: .8rem; font-weight: 300;
-  letter-spacing: 3px; text-transform: uppercase; color: var(--text-mid);
-  font-style: italic;
-}
-.day-header .dh-num {
-  font-family: 'Fraunces', serif; font-size: 2.8rem; font-weight: 700;
-  color: var(--pink); line-height: 1.05;
-}
-.day-header .dh-month {
-  font-family: 'Fraunces', serif; font-size: 1.1rem; font-weight: 300;
-  color: var(--text); font-style: italic;
-}
+/* PROGRESS */
+.prog-wrap{margin-bottom:20px;}
+.prog-meta{display:flex;justify-content:space-between;font-size:.78rem;color:var(--text-mid);margin-bottom:5px;font-weight:600;}
+.prog-track{height:7px;background:var(--pink-l);border-radius:10px;overflow:hidden;}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--pink),var(--amber));border-radius:10px;transition:width .6s cubic-bezier(.4,0,.2,1);}
 
-/* ───── PROGRESS ───── */
-.prog-wrap { margin-bottom: 20px; }
-.prog-meta {
-  display: flex; justify-content: space-between;
-  font-size: .78rem; color: var(--text-mid);
-  margin-bottom: 5px; font-weight: 600;
-}
-.prog-track {
-  height: 7px; background: var(--pink-l); border-radius: 10px; overflow: hidden;
-}
-.prog-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--pink), var(--amber));
-  border-radius: 10px; transition: width .6s cubic-bezier(.4,0,.2,1);
-}
+/* AVATAR MANTRA */
+.avatar-mantra{display:flex;align-items:flex-end;gap:14px;margin-bottom:24px;animation:fadeUp .45s ease;}
+.av-wrap{flex-shrink:0;width:84px;height:84px;}
+.av-img{width:84px;height:84px;border-radius:50%;object-fit:cover;object-position:center top;border:3px solid var(--pink-l);box-shadow:0 4px 18px rgba(255,107,138,.22);}
+.av-bubble{flex:1;background:var(--white);border:2px solid var(--pink-l);border-radius:18px 18px 18px 4px;padding:13px 15px;font-size:.88rem;line-height:1.55;color:var(--text);font-weight:500;box-shadow:var(--shadow);}
 
-/* ───── AVATAR MANTRA ───── */
-.avatar-mantra {
-  display: flex; align-items: flex-end; gap: 14px;
-  margin-bottom: 24px; animation: fadeUp .45s ease;
-}
-.av-wrap {
-  flex-shrink: 0;
-  width: 84px; height: 84px; position: relative;
-}
-.av-img {
-  width: 84px; height: 84px; border-radius: 50%;
-  object-fit: cover; object-position: center top;
-  border: 3px solid var(--pink-l);
-  box-shadow: 0 4px 18px rgba(255,107,138,.22);
-}
-.av-bubble {
-  flex: 1;
-  background: var(--white);
-  border: 2px solid var(--pink-l);
-  border-radius: 18px 18px 18px 4px;
-  padding: 13px 15px;
-  font-size: .88rem; line-height: 1.55;
-  color: var(--text); font-weight: 500;
-  box-shadow: var(--shadow);
-  position: relative;
-}
+/* CARDS */
+.card{background:var(--white);border-radius:18px;padding:18px;margin-bottom:14px;box-shadow:var(--shadow);border:1px solid var(--border);animation:fadeUp .4s ease;}
+.card-title{font-family:'Fraunces',serif;font-size:1rem;font-weight:700;color:var(--text);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.card-title .ico{font-size:1.15rem;}
 
-/* ───── SECTION CARDS ───── */
-.card {
-  background: var(--white);
-  border-radius: 18px; padding: 18px;
-  margin-bottom: 14px;
-  box-shadow: var(--shadow);
-  border: 1px solid var(--border);
-  animation: fadeUp .4s ease;
-}
-.card-title {
-  font-family: 'Fraunces', serif;
-  font-size: 1rem; font-weight: 700;
-  color: var(--text); margin-bottom: 14px;
-  display: flex; align-items: center; gap: 8px;
-}
-.card-title .ico { font-size: 1.15rem; }
+/* CHECKBOXES */
+.ck-item{display:flex;align-items:center;gap:11px;padding:9px 0;border-bottom:1px solid var(--border);cursor:pointer;border-radius:8px;transition:background .15s,padding .15s;user-select:none;}
+.ck-item:last-of-type{border-bottom:none;}
+.ck-item:active{background:var(--pink-ll);padding:9px 8px;margin:0 -8px;}
+.ck-box{width:24px;height:24px;border-radius:7px;border:2px solid var(--pink-l);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.78rem;color:transparent;transition:all .2s;}
+.ck-item.is-checked .ck-box{background:var(--mint);border-color:var(--mint);color:white;}
+.ck-text{font-size:.88rem;color:var(--text);flex:1;transition:all .2s;}
+.ck-item.is-checked .ck-text{color:var(--text-soft);text-decoration:line-through;text-decoration-color:var(--mint);}
 
-/* ───── CHECKBOXES ───── */
-.ck-item {
-  display: flex; align-items: center; gap: 11px;
-  padding: 9px 0;
-  border-bottom: 1px solid var(--border);
-  cursor: pointer;
-  border-radius: 8px;
-  transition: background .15s, padding .15s;
-  user-select: none;
-}
-.ck-item:last-of-type { border-bottom: none; }
-.ck-item:active { background: var(--pink-ll); padding: 9px 8px; margin: 0 -8px; }
-.ck-box {
-  width: 24px; height: 24px; border-radius: 7px;
-  border: 2px solid var(--pink-l); flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center;
-  font-size: .78rem; color: transparent;
-  transition: all .2s;
-}
-.ck-item.is-checked .ck-box {
-  background: var(--mint); border-color: var(--mint); color: white;
-}
-.ck-text {
-  font-size: .88rem; color: var(--text); flex: 1;
-  transition: all .2s;
-}
-.ck-item.is-checked .ck-text {
-  color: var(--text-soft);
-  text-decoration: line-through;
-  text-decoration-color: var(--mint);
-}
+/* INPUTS */
+.field-label{display:block;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--text-mid);margin-top:13px;margin-bottom:5px;}
+.j-input{width:100%;padding:9px 12px;border:2px solid var(--border);border-radius:10px;font-family:'Nunito',sans-serif;font-size:.88rem;color:var(--text);background:var(--cream);resize:none;outline:none;transition:border-color .2s,background .2s;}
+.j-input:focus{border-color:var(--pink-l);background:var(--white);}
+.j-input::placeholder{color:#D4C4BC;font-style:italic;}
 
-/* ───── TEXT INPUTS ───── */
-.field-label {
-  display: block; font-size: .72rem; font-weight: 700;
-  text-transform: uppercase; letter-spacing: .6px;
-  color: var(--text-mid); margin-top: 13px; margin-bottom: 5px;
-}
-.j-input {
-  width: 100%; padding: 9px 12px;
-  border: 2px solid var(--border); border-radius: 10px;
-  font-family: 'Nunito', sans-serif; font-size: .88rem;
-  color: var(--text); background: var(--cream);
-  resize: none; outline: none;
-  transition: border-color .2s, background .2s;
-}
-.j-input:focus { border-color: var(--pink-l); background: var(--white); }
-.j-input::placeholder { color: #D4C4BC; font-style: italic; }
+/* WATER */
+.water-drops{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
+.w-drop{font-size:1.7rem;cursor:pointer;filter:grayscale(1) opacity(.28);transition:all .2s;user-select:none;}
+.w-drop.on{filter:none;transform:scale(1.1);}
+.w-drop:active{transform:scale(.9);}
+.w-msg{font-size:.8rem;color:var(--text-mid);margin-top:7px;font-weight:600;min-height:20px;}
 
-/* ───── WATER ───── */
-.water-drops {
-  display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px;
-}
-.w-drop {
-  font-size: 1.7rem; cursor: pointer;
-  filter: grayscale(1) opacity(.28);
-  transition: all .2s; user-select: none;
-}
-.w-drop.on { filter: none; transform: scale(1.1); }
-.w-drop:active { transform: scale(.9); }
-.w-msg { font-size: .8rem; color: var(--text-mid); margin-top: 7px; font-weight: 600; min-height: 20px; }
+/* INTENSITY */
+.int-btns{display:flex;gap:8px;margin-top:9px;}
+.int-btn{flex:1;padding:8px 4px;border-radius:10px;border:2px solid var(--border);background:var(--white);font-family:'Nunito',sans-serif;font-size:.82rem;font-weight:700;cursor:pointer;transition:all .2s;text-align:center;}
+.int-btn.on{border-color:var(--teal);background:var(--teal-l);}
 
-/* ───── INTENSITY ───── */
-.int-btns { display: flex; gap: 8px; margin-top: 9px; }
-.int-btn {
-  flex: 1; padding: 8px 4px; border-radius: 10px;
-  border: 2px solid var(--border); background: var(--white);
-  font-family: 'Nunito', sans-serif; font-size: .82rem; font-weight: 700;
-  cursor: pointer; transition: all .2s; text-align: center;
-}
-.int-btn.on { border-color: var(--teal); background: var(--teal-l); }
+/* SMOKE */
+.smoke-row{display:flex;align-items:center;gap:14px;margin-top:12px;}
+.sm-btn{width:38px;height:38px;border-radius:50%;border:2px solid var(--pink-l);background:var(--white);font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:900;color:var(--pink);transition:all .2s;}
+.sm-btn:hover{background:var(--pink-l);}
+.sm-num{font-family:'Fraunces',serif;font-size:2.2rem;font-weight:700;color:var(--text);min-width:48px;text-align:center;line-height:1;}
+.sm-label{font-size:.8rem;color:var(--text-mid);}
+.sm-msg{margin-top:10px;padding:9px 13px;border-radius:10px;font-size:.84rem;font-weight:700;display:none;}
+.sm-msg.show{display:block;}
+.sm-great{background:var(--mint-l);color:#1D7A50;}
+.sm-good{background:var(--teal-l);color:#1A6E6E;}
+.sm-ok{background:var(--amber-l);color:#9A6800;}
+.sm-bad{background:#FFEAE0;color:#B03020;}
 
-/* ───── SMOKE ───── */
-.smoke-row {
-  display: flex; align-items: center; gap: 14px;
-  margin-top: 12px;
-}
-.sm-btn {
-  width: 38px; height: 38px; border-radius: 50%;
-  border: 2px solid var(--pink-l); background: var(--white);
-  font-size: 1.2rem; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  font-weight: 900; color: var(--pink);
-  transition: all .2s;
-}
-.sm-btn:hover { background: var(--pink-l); }
-.sm-num {
-  font-family: 'Fraunces', serif; font-size: 2.2rem; font-weight: 700;
-  color: var(--text); min-width: 48px; text-align: center; line-height: 1;
-}
-.sm-label { font-size: .8rem; color: var(--text-mid); }
-.sm-msg {
-  margin-top: 10px; padding: 9px 13px;
-  border-radius: 10px; font-size: .84rem; font-weight: 700;
-  display: none;
-}
-.sm-msg.show { display: block; }
-.sm-great { background: var(--mint-l); color: #1D7A50; }
-.sm-good  { background: var(--teal-l); color: #1A6E6E; }
-.sm-ok    { background: var(--amber-l); color: #9A6800; }
-.sm-bad   { background: #FFEAE0; color: #B03020; }
+/* SLEEP */
+.time-row{display:flex;gap:10px;margin-top:10px;}
+.time-col{flex:1;}
+.t-input{width:100%;padding:8px 10px;border:2px solid var(--border);border-radius:10px;font-family:'Nunito',sans-serif;font-size:.95rem;color:var(--text);background:var(--cream);outline:none;transition:border-color .2s;}
+.t-input:focus{border-color:var(--pink-l);background:var(--white);}
+.sleep-result{text-align:center;margin-top:8px;font-size:.84rem;color:var(--text-mid);font-weight:700;min-height:22px;}
 
-/* ───── SLEEP ───── */
-.time-row { display: flex; gap: 10px; margin-top: 10px; }
-.time-col { flex: 1; }
-.t-input {
-  width: 100%; padding: 8px 10px;
-  border: 2px solid var(--border); border-radius: 10px;
-  font-family: 'Nunito', sans-serif; font-size: .95rem;
-  color: var(--text); background: var(--cream); outline: none;
-  transition: border-color .2s;
-}
-.t-input:focus { border-color: var(--pink-l); background: var(--white); }
-.sleep-result {
-  text-align: center; margin-top: 8px;
-  font-size: .84rem; color: var(--text-mid); font-weight: 700;
-  min-height: 22px;
-}
+/* MOOD */
+.mood-row{display:flex;gap:10px;margin-top:10px;}
+.mood-btn{font-size:1.9rem;cursor:pointer;padding:4px;border-radius:8px;filter:grayscale(.5) opacity(.5);transition:all .2s;user-select:none;}
+.mood-btn.on{filter:none;transform:scale(1.28);background:var(--pink-ll);}
 
-/* ───── MOOD ───── */
-.mood-row { display: flex; gap: 10px; margin-top: 10px; }
-.mood-btn {
-  font-size: 1.9rem; cursor: pointer; padding: 4px;
-  border-radius: 8px; filter: grayscale(.5) opacity(.5);
-  transition: all .2s; user-select: none;
-}
-.mood-btn.on { filter: none; transform: scale(1.28); background: var(--pink-ll); }
+/* TOAST */
+.save-toast{position:fixed;bottom:22px;right:18px;background:var(--mint);color:white;padding:7px 16px;border-radius:20px;font-size:.78rem;font-weight:800;opacity:0;transition:opacity .3s;box-shadow:0 3px 12px rgba(114,208,160,.35);z-index:999;pointer-events:none;}
+.save-toast.show{opacity:1;}
 
-/* ───── SAVE TOAST ───── */
-.save-toast {
-  position: fixed; bottom: 22px; right: 18px;
-  background: var(--mint); color: white;
-  padding: 7px 16px; border-radius: 20px;
-  font-size: .78rem; font-weight: 800;
-  opacity: 0; transition: opacity .3s;
-  box-shadow: 0 3px 12px rgba(114,208,160,.35);
-  z-index: 999; pointer-events: none;
-}
-.save-toast.show { opacity: 1; }
+/* ANIMATIONS */
+@keyframes fadeDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 
-/* ───── ANIMATIONS ───── */
-@keyframes fadeDown {
-  from { opacity:0; transform:translateY(-8px); }
-  to   { opacity:1; transform:translateY(0); }
+@media(max-width:420px){
+  .main{padding:16px 11px 90px;}
+  .day-header .dh-num{font-size:2.3rem;}
+  .av-wrap,.av-img{width:70px;height:70px;}
 }
-@keyframes fadeUp {
-  from { opacity:0; transform:translateY(10px); }
-  to   { opacity:1; transform:translateY(0); }
-}
-
-/* ───── RESPONSIVE ───── */
-@media (max-width: 420px) {
-  .main { padding: 16px 11px 90px; }
-  .day-header .dh-num { font-size: 2.3rem; }
-  .av-wrap, .av-img { width: 70px; height: 70px; }
-}
-
-/* ───── LOGIN ───── */
-#loginScreen {
-  min-height: 100dvh;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  gap: 28px; padding: 24px;
-  background: linear-gradient(160deg, #FFF0F4 0%, #FFF8F2 60%, #FFF0E0 100%);
-}
-.login-avatar {
-  width: 100px; height: 100px; border-radius: 50%;
-  object-fit: cover; object-position: center top;
-  border: 4px solid var(--pink-l);
-  box-shadow: 0 6px 24px rgba(255,107,138,.22);
-}
-.login-title {
-  font-family: 'Fraunces', serif;
-  font-size: 1.6rem; font-weight: 700;
-  color: var(--pink); text-align: center; line-height: 1.2;
-}
-.login-sub {
-  font-size: .82rem; color: var(--text-mid);
-  text-align: center; margin-top: 4px; font-style: italic;
-}
-.login-box {
-  background: var(--white);
-  border: 2px solid var(--pink-l);
-  border-radius: 20px; padding: 28px 24px;
-  width: 100%; max-width: 320px;
-  display: flex; flex-direction: column; gap: 14px;
-  box-shadow: 0 8px 32px rgba(255,107,138,.12);
-}
-.login-label {
-  font-size: .7rem; font-weight: 800;
-  letter-spacing: .1em; text-transform: uppercase;
-  color: var(--text-mid);
-}
-.login-input {
-  width: 100%; padding: 12px 16px;
-  border: 2px solid var(--pink-l); border-radius: 12px;
-  font-family: 'Nunito', sans-serif; font-size: 1rem;
-  color: var(--text); background: var(--cream);
-  outline: none; transition: border-color .2s;
-}
-.login-input:focus { border-color: var(--pink); background: var(--white); }
-.login-input.error { border-color: #F05050; background: #FFF0F0; }
-.login-btn {
-  width: 100%; padding: 13px;
-  background: linear-gradient(135deg, var(--pink), var(--pink-d));
-  color: white; border: none; border-radius: 12px;
-  font-family: 'Nunito', sans-serif; font-size: .95rem; font-weight: 800;
-  cursor: pointer; transition: opacity .2s, transform .1s;
-  box-shadow: 0 4px 14px rgba(255,107,138,.35);
-}
-.login-btn:hover { opacity: .9; }
-.login-btn:active { transform: scale(.97); }
-.login-error {
-  font-size: .78rem; color: #D03030;
-  text-align: center; font-weight: 700; min-height: 18px;
-}
-#app { display: none; }
 </style>
 </head>
 <body>
@@ -444,7 +161,7 @@ body {
   </div>
   <div class="login-box">
     <div class="login-label">Mot de passe</div>
-    <input class="login-input" type="password" id="pwdInput" placeholder="••••••••" autocomplete="current-password" />
+    <input class="login-input" type="password" id="pwdInput" placeholder="••••••••" autocomplete="current-password"/>
     <div class="login-error" id="loginError"></div>
     <button class="login-btn" onclick="doLogin()">Entrer ✨</button>
   </div>
@@ -452,11 +169,16 @@ body {
 
 <!-- APP -->
 <div id="app">
+
+<!-- TOP BAR -->
 <div class="top-bar">
   <div class="app-logo">📖 Mon Journal</div>
   <div class="month-tabs">
-    <button class="month-tab" id="tab-mars"  onclick="switchMonth('mars')">Mars</button>
-    <button class="month-tab" id="tab-avril" onclick="switchMonth('avril')">Avril</button>
+    <button class="month-tab" id="tab-mars"  onclick="switchMonth(2)">Mars</button>
+    <button class="month-tab" id="tab-avril" onclick="switchMonth(3)">Avr</button>
+    <button class="month-tab" id="tab-mai"   onclick="switchMonth(4)">Mai</button>
+    <button class="month-tab" id="tab-juin"  onclick="switchMonth(5)">Juin</button>
+    <button class="month-tab" id="tab-juil"  onclick="switchMonth(6)">Juil</button>
   </div>
   <div style="display:flex;align-items:center;gap:8px;">
     <div class="streak-pill" id="streakEl">🔥 0j</div>
@@ -486,8 +208,6 @@ body {
 
 <!-- MAIN -->
 <div class="main">
-
-  <!-- NAV + HEADER -->
   <div class="day-nav">
     <button class="nav-btn" id="prevBtn" onclick="go(-1)">←</button>
     <div class="day-header">
@@ -498,57 +218,29 @@ body {
     <button class="nav-btn" id="nextBtn" onclick="go(1)">→</button>
   </div>
 
-  <!-- PROGRESS -->
   <div class="prog-wrap">
-    <div class="prog-meta">
-      <span>Avancement du jour</span>
-      <span id="progTxt">0 %</span>
-    </div>
-    <div class="prog-track">
-      <div class="prog-fill" id="progFill" style="width:0%"></div>
-    </div>
+    <div class="prog-meta"><span>Avancement du jour</span><span id="progTxt">0 %</span></div>
+    <div class="prog-track"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
   </div>
 
-  <!-- AVATAR + MANTRA -->
   <div class="avatar-mantra">
-    <div class="av-wrap">
-      <img src="avatar.png" alt="Juju" class="av-img">
-    </div>
+    <div class="av-wrap"><img src="avatar.png" alt="Juju" class="av-img"></div>
     <div class="av-bubble" id="mantraEl">…</div>
   </div>
 
-  <!-- ☀️ MATIN -->
+  <!-- MATIN -->
   <div class="card">
     <div class="card-title"><span class="ico">🌅</span> Réveil & Matin</div>
-
-    <div class="ck-item" data-key="m_snooze">
-      <div class="ck-box">✓</div>
-      <div class="ck-text">Levée sans snooze (ou presque 😅)</div>
-    </div>
-    <div class="ck-item" data-key="m_tel">
-      <div class="ck-box">✓</div>
-      <div class="ck-text">Pas le téléphone direct au réveil</div>
-    </div>
-    <div class="ck-item" data-key="m_eau">
-      <div class="ck-box">✓</div>
-      <div class="ck-text">Verre d'eau dès le saut du lit 💧</div>
-    </div>
-    <div class="ck-item" data-key="m_skin">
-      <div class="ck-box">✓</div>
-      <div class="ck-text">Routine / skincare faite</div>
-    </div>
-    <div class="ck-item" data-key="m_calme">
-      <div class="ck-box">✓</div>
-      <div class="ck-text">5 min pour moi avant de plonger dans la journée 🧘‍♀️</div>
-    </div>
-
+    <div class="ck-item" data-key="m_snooze"><div class="ck-box">✓</div><div class="ck-text">Levée sans snooze (ou presque 😅)</div></div>
+    <div class="ck-item" data-key="m_tel"><div class="ck-box">✓</div><div class="ck-text">Pas le téléphone direct au réveil</div></div>
+    <div class="ck-item" data-key="m_eau"><div class="ck-box">✓</div><div class="ck-text">Verre d'eau dès le saut du lit 💧</div></div>
+    <div class="ck-item" data-key="m_skin"><div class="ck-box">✓</div><div class="ck-text">Routine / skincare faite</div></div>
+    <div class="ck-item" data-key="m_calme"><div class="ck-box">✓</div><div class="ck-text">5 min pour moi avant de plonger dans la journée 🧘‍♀️</div></div>
     <label class="field-label">Comment je me sens ce matin ?</label>
-    <textarea class="j-input" rows="2" id="t_matin_feeling"
-      placeholder="Fatiguée mais motivée ? En forme ? À moitié endormie ? Ici t'es honnête."
-      oninput="saveField('matin_feeling',this.value)"></textarea>
+    <textarea class="j-input" rows="2" id="t_matin_feeling" placeholder="Fatiguée mais motivée ? En forme ? À moitié endormie ?" oninput="saveField('matin_feeling',this.value)"></textarea>
   </div>
 
-  <!-- 💧 HYDRATATION -->
+  <!-- HYDRATATION -->
   <div class="card">
     <div class="card-title"><span class="ico">💧</span> Hydratation</div>
     <p style="font-size:.8rem;color:var(--text-mid);margin-bottom:8px;">Objectif : 8 verres — clique pour cocher !</p>
@@ -563,39 +255,27 @@ body {
       <span class="w-drop" data-wi="7" onclick="toggleWater(7)">💧</span>
     </div>
     <div class="w-msg" id="waterMsg"></div>
-
     <label class="field-label">Café / thé / autre ?</label>
-    <input type="text" class="j-input" id="t_hydra_note"
-      placeholder="Ex : 3 cafés, 2 tisanes… (sans jugement 😌)"
-      oninput="saveField('hydra_note',this.value)">
+    <input type="text" class="j-input" id="t_hydra_note" placeholder="Ex : 3 cafés, 2 tisanes…" oninput="saveField('hydra_note',this.value)">
   </div>
 
-  <!-- 🏃 SPORT -->
+  <!-- SPORT -->
   <div class="card">
     <div class="card-title"><span class="ico">🏃‍♀️</span> Sport & Mouvement</div>
-
-    <div class="ck-item" data-key="s_fait">
-      <div class="ck-box">✓</div>
-      <div class="ck-text">J'ai bougé aujourd'hui 💪</div>
-    </div>
-
+    <div class="ck-item" data-key="s_fait"><div class="ck-box">✓</div><div class="ck-text">J'ai bougé aujourd'hui 💪</div></div>
     <label class="field-label">Quoi ?</label>
-    <input type="text" class="j-input" id="t_sport_quoi"
-      placeholder="Marche, gym, yoga, vélo, zumba dans ma cuisine…"
-      oninput="saveField('sport_quoi',this.value)">
-
+    <input type="text" class="j-input" id="t_sport_quoi" placeholder="Marche, gym, yoga, vélo, zumba dans ma cuisine…" oninput="saveField('sport_quoi',this.value)">
     <label class="field-label">Intensité</label>
     <div class="int-btns">
-      <button class="int-btn" data-iv="leger"  onclick="setInt('leger',this)" >😴 Léger</button>
-      <button class="int-btn" data-iv="moyen"  onclick="setInt('moyen',this)" >💪 Moyen</button>
+      <button class="int-btn" data-iv="leger"   onclick="setInt('leger',this)">😴 Léger</button>
+      <button class="int-btn" data-iv="moyen"   onclick="setInt('moyen',this)">💪 Moyen</button>
       <button class="int-btn" data-iv="intense" onclick="setInt('intense',this)">🔥 Intense</button>
     </div>
   </div>
 
-  <!-- 🚭 CIGARETTES -->
+  <!-- CIGARETTES -->
   <div class="card">
     <div class="card-title"><span class="ico">🚭</span> Cigarettes</div>
-
     <div class="smoke-row">
       <button class="sm-btn" onclick="adjSmoke(-1)">−</button>
       <div class="sm-num" id="smokeNum">0</div>
@@ -603,82 +283,45 @@ body {
       <span class="sm-label">cigarettes<br>aujourd'hui</span>
     </div>
     <div class="sm-msg" id="smokeMsg"></div>
-
-    <div class="ck-item" data-key="s_resist" style="margin-top:12px;">
-      <div class="ck-box">✓</div>
-      <div class="ck-text">J'ai résisté à au moins 1 envie de fumer 💪</div>
-    </div>
+    <div class="ck-item" data-key="s_resist" style="margin-top:12px;"><div class="ck-box">✓</div><div class="ck-text">J'ai résisté à au moins 1 envie de fumer 💪</div></div>
   </div>
 
-  <!-- 💼 BOULOT -->
+  <!-- BOULOT -->
   <div class="card">
     <div class="card-title"><span class="ico">💼</span> Boulot</div>
-
-    <div class="ck-item" data-key="w_todo">
-      <div class="ck-box">✓</div>
-      <div class="ck-text">To-do du matin faite</div>
-    </div>
-    <div class="ck-item" data-key="w_calls">
-      <div class="ck-box">✓</div>
-      <div class="ck-text">Au moins 1 session setting / appels</div>
-    </div>
-    <div class="ck-item" data-key="w_focus">
-      <div class="ck-box">✓</div>
-      <div class="ck-text">Pas de procrastination sur le principal</div>
-    </div>
-
-    <label class="field-label">Ma victoire pro du jour (même mini !) 🏆</label>
-    <input type="text" class="j-input" id="t_work_win"
-      placeholder="Script patchée, RDV quali décroché, SOP terminée…"
-      oninput="saveField('work_win',this.value)">
+    <div class="ck-item" data-key="w_todo"><div class="ck-box">✓</div><div class="ck-text">To-do du matin faite</div></div>
+    <div class="ck-item" data-key="w_calls"><div class="ck-box">✓</div><div class="ck-text">Au moins 1 session setting / appels</div></div>
+    <div class="ck-item" data-key="w_focus"><div class="ck-box">✓</div><div class="ck-text">Pas de procrastination sur le principal</div></div>
+    <label class="field-label">Ma victoire pro du jour 🏆</label>
+    <input type="text" class="j-input" id="t_work_win" placeholder="Script patchée, RDV quali décroché…" oninput="saveField('work_win',this.value)">
   </div>
 
-  <!-- 🌙 SOIR & SOMMEIL -->
+  <!-- SOIR -->
   <div class="card">
     <div class="card-title"><span class="ico">🌙</span> Soir & Sommeil</div>
-
-    <div class="ck-item" data-key="e_diner">
-      <div class="ck-box">✓</div>
-      <div class="ck-text">Dîner correct (pas que du café à 20h 😅)</div>
-    </div>
-    <div class="ck-item" data-key="e_ecran">
-      <div class="ck-box">✓</div>
-      <div class="ck-text">Téléphone posé 30 min avant de dormir</div>
-    </div>
-    <div class="ck-item" data-key="e_calme">
-      <div class="ck-box">✓</div>
-      <div class="ck-text">Je me suis accordé un moment calme ce soir ✨</div>
-    </div>
-
+    <div class="ck-item" data-key="e_diner"><div class="ck-box">✓</div><div class="ck-text">Dîner correct (pas que du café à 20h 😅)</div></div>
+    <div class="ck-item" data-key="e_ecran"><div class="ck-box">✓</div><div class="ck-text">Téléphone posé 30 min avant de dormir</div></div>
+    <div class="ck-item" data-key="e_calme"><div class="ck-box">✓</div><div class="ck-text">Je me suis accordé un moment calme ce soir ✨</div></div>
     <div class="time-row">
       <div class="time-col">
         <label class="field-label">Heure de coucher</label>
-        <input type="time" class="t-input" id="t_sleep_bed"
-          onchange="saveField('sleep_bed',this.value);calcSleep()">
+        <input type="time" class="t-input" id="t_sleep_bed" onchange="saveField('sleep_bed',this.value);calcSleep()">
       </div>
       <div class="time-col">
         <label class="field-label">Heure de réveil</label>
-        <input type="time" class="t-input" id="t_sleep_wake"
-          onchange="saveField('sleep_wake',this.value);calcSleep()">
+        <input type="time" class="t-input" id="t_sleep_wake" onchange="saveField('sleep_wake',this.value);calcSleep()">
       </div>
     </div>
     <div class="sleep-result" id="sleepRes"></div>
   </div>
 
-  <!-- ✨ RÉFLEXION -->
+  <!-- RÉFLEXION -->
   <div class="card">
     <div class="card-title"><span class="ico">✨</span> Réflexion du jour</div>
-
     <label class="field-label">1 chose dont je suis fière aujourd'hui</label>
-    <textarea class="j-input" rows="2" id="t_fiere"
-      placeholder="Même la plus petite victoire compte, surtout celle-là."
-      oninput="saveField('fiere',this.value)"></textarea>
-
+    <textarea class="j-input" rows="2" id="t_fiere" placeholder="Même la plus petite victoire compte." oninput="saveField('fiere',this.value)"></textarea>
     <label class="field-label">1 truc à améliorer demain</label>
-    <textarea class="j-input" rows="2" id="t_amelio"
-      placeholder="Sans se flageller hein. Juste une note douce pour demain matin."
-      oninput="saveField('amelio',this.value)"></textarea>
-
+    <textarea class="j-input" rows="2" id="t_amelio" placeholder="Sans se flageller. Juste une note douce pour demain." oninput="saveField('amelio',this.value)"></textarea>
     <label class="field-label">Ma journée en un emoji</label>
     <div class="mood-row">
       <span class="mood-btn" data-mood="😩" onclick="setMood('😩',this)">😩</span>
@@ -687,15 +330,11 @@ body {
       <span class="mood-btn" data-mood="😊" onclick="setMood('😊',this)">😊</span>
       <span class="mood-btn" data-mood="🤩" onclick="setMood('🤩',this)">🤩</span>
     </div>
-
-    <label class="field-label">Note libre — espace 100 % à toi 💖</label>
-    <textarea class="j-input" rows="3" id="t_libre"
-      placeholder="Pensées, idées, feelings, rants... Personne te juge ici."
-      oninput="saveField('libre',this.value)"></textarea>
+    <label class="field-label">Note libre 💖</label>
+    <textarea class="j-input" rows="3" id="t_libre" placeholder="Pensées, idées, feelings, rants... Personne te juge ici." oninput="saveField('libre',this.value)"></textarea>
   </div>
 
 </div><!-- /main -->
-
 </div><!-- /app -->
 
 <div class="save-toast" id="toast">✓ Sauvegardé</div>
@@ -706,15 +345,15 @@ body {
    ========================================================= */
 const DAYS = [];
 const D_START = new Date(2026,2,22);
-const D_END   = new Date(2026,3,30);
+const D_END   = new Date(2026,6,31);
 for (let d = new Date(D_START); d <= D_END; d.setDate(d.getDate()+1))
   DAYS.push(new Date(d));
 
-const DAY_FR  = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
-const MON_FR  = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+const DAY_FR = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
+const MON_FR = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
 
 /* =========================================================
-   MANTRAS — 1 par jour du 22 mars au 30 avril
+   MANTRAS — 22 mars → 31 juillet (132 jours)
    ========================================================= */
 const MANTRAS = [
 /* 22 mars */ "T'as survécu à 100 % de tes mauvaises journées. Statistiquement, t'es inarrêtable. 💪",
@@ -728,13 +367,13 @@ const MANTRAS = [
 /* 30 mars */ "Ta meilleure pote te dit : arrête de te juger et commence à te construire. 💪",
 /* 31 mars */ "Ce soir tu seras fière d'avoir commencé. Même petitement. C'est déjà ça.",
 /* 1 avril  */ "Avril commence. Nouveau mois, mêmes valeurs, plus d'élan. LET'S GO. 🚀",
-/* 2 avril  */ "L'eau hydrate le corps. Ce journal hydrate l'âme. Ok c'est un peu deep mais c'est vrai. 💙",
+/* 2 avril  */ "L'eau hydrate le corps. Ce journal hydrate l'âme. Ok c'est deep mais c'est vrai. 💙",
 /* 3 avril  */ "Ton corps t'a portée jusqu'ici. Il mérite un peu d'amour en retour. 💖",
 /* 4 avril  */ "Moins de clopes = plus de souffle pour célébrer tes victoires. Logique, non ? 🎉",
 /* 5 avril  */ "Une routine le matin c'est comme un GPS pour ta journée. Sinon tu te perds dans Instagram. 📱",
 /* 6 avril  */ "Cocher une case libère de la dopamine. C'est scientifique. Alors COCHE. ✅",
 /* 7 avril  */ "Tu n'es pas en retard. Tu commences exactement quand il le fallait. 🕐",
-/* 8 avril  */ "Ton futur self te regarde depuis 2027. Il(elle) est fier(e). Et vraiment beau(belle). ✨",
+/* 8 avril  */ "Ton futur self te regarde depuis 2027. Il est fier. Et vraiment beau. ✨",
 /* 9 avril  */ "Les habitudes se construisent comme IKEA : une pièce à la fois, et parfois ça énerve un peu. 😅",
 /* 10 avril */ "Aujourd'hui : faire de son mieux. Demain : idem. Après-demain : idem. C'est ça le game.",
 /* 11 avril */ "Le sport c'est pas forcément la salle. Marcher jusqu'à la boulangerie ça compte. (Ok, un peu. 🥐)",
@@ -742,21 +381,113 @@ const MANTRAS = [
 /* 13 avril */ "Une cigarette de moins = 5 minutes de vie gagnées. Mets-les dans ta tirelire mentale. 🏦",
 /* 14 avril */ "Routine soir = préparer la version reposée et lumineuse de toi pour demain. 🌙",
 /* 15 avril */ "Si Beyoncé avait les mêmes 24h, elle aurait aussi des jours mous. Mais elle se lèverait quand même.",
-/* 16 avril */ "LA PROGRESSION > LA PERFECTION. T'as entendu ? LA PROGRESSION > LA PERFECTION. 🏆",
+/* 16 avril */ "LA PROGRESSION > LA PERFECTION. T'as entendu ? 🏆",
 /* 17 avril */ "Ton cerveau récompense les petites victoires. Donne-lui ce qu'il veut. 🧠✨",
 /* 18 avril */ "Dormir 7h c'est pas de la flemme. C'est de la haute performance. Reframe ça, vite. 😴💪",
-/* 19 avril */ "T'as 5 équipes actives, un Sales OS et ce journal ouvert. Tu gères. Sérieusement. 🦁",
+/* 19 avril */ "T'as des équipes actives, un Sales OS et ce journal ouvert. Tu gères. Sérieusement. 🦁",
 /* 20 avril */ "Le mantra du jour : je me choisis. Pas pour être parfaite. Juste pour être moi. 💕",
 /* 21 avril */ "Discipline = liberté. Pas juste un truc de coach LinkedIn. Pour de vrai. 🔑",
 /* 22 avril */ "Chaque matin est un reset gratuit. Et celui-là, il est pour toi. 🌅",
 /* 23 avril */ "Sport = anti-stress + meilleur mood + meilleur sommeil. C'est le pack complet. 🎁",
 /* 24 avril */ "Hydratée → concentrée → performante → fière. La chaîne gagnante de ta journée. 💧➡️🏆",
-/* 25 avril */ "Moins de clopes aujourd'hui = demain tu respires mieux pendant un call. Connexion directe. 📞",
+/* 25 avril */ "Moins de clopes aujourd'hui = demain tu respires mieux pendant un call. 📞",
 /* 26 avril */ "Ta routine matin c'est ton armure. Enfile-la avant de partir au combat. ⚔️",
-/* 27 avril */ "Finir la journée avec ce journal rempli = te dire bonne nuit à toi-même. Dors bien. 🌙",
+/* 27 avril */ "Finir la journée avec ce journal rempli = te dire bonne nuit à toi-même. 🌙",
 /* 28 avril */ "T'as quasiment tenu tout le mois. C'est déjà énorme. Vraiment.",
 /* 29 avril */ "Presque fin de mois. Ce que t'as semé ce mois-ci... tu vas le récolter. 🌱",
-/* 30 avril */ "Dernier jour du mois. Pas la fin — juste le début de ce que t'as construit. 🌟"
+/* 30 avril */ "Dernier jour d'avril. Pas la fin — juste le début de ce que t'as construit. 🌟",
+/* 1 mai    */ "MAI. Un mois entier devant toi. Vierge. Remplis-le bien. 🌸",
+/* 2 mai    */ "Le printemps est là, toi aussi. Aucune raison de rester en mode hibernation. ☀️",
+/* 3 mai    */ "Une bonne journée commence par une bonne décision. Laquelle tu prends ce matin ? 💡",
+/* 4 mai    */ "Chaque verre d'eau bu c'est ton corps qui te dit merci. Il est poli, ton corps. 💧",
+/* 5 mai    */ "T'as pas besoin d'être parfaite. T'as besoin d'être présente. Nuance énorme. 🎯",
+/* 6 mai    */ "Une clope de moins par jour = une semaine de vie gagnée par an. Les maths sont de ton côté. 📊",
+/* 7 mai    */ "Le sport libère des endorphines. Les endorphines rendent heureuse. Heureuse = meilleure pote, meilleure vendeuse, meilleure toi. 🏃‍♀️",
+/* 8 mai    */ "Jour férié ou pas, tes habitudes ne prennent pas de vacances. (Bon ok, un peu. 😌)",
+/* 9 mai    */ "Ce journal c'est pas une contrainte. C'est une conversation avec toi-même. Sois honnête. 📖",
+/* 10 mai   */ "10 jours de mai. T'as pris le rythme ou t'es encore à l'échauffement ? Les deux sont ok. 🔥",
+/* 11 mai   */ "Le silence du matin avant que tout commence ? C'est toi. Profites-en. 🌅",
+/* 12 mai   */ "Dormir tôt c'est le cadeau que tu te fais demain matin. Offre-le toi ce soir. 🎁",
+/* 13 mai   */ "Résister à une envie de fumer = un muscle qui se renforce. T'es en train de te muscler. 💪",
+/* 14 mai   */ "Mi-mai. Check : t'es plus avancée qu'il y a deux semaines ? Forcément oui. 📅",
+/* 15 mai   */ "Aujourd'hui tu plants une graine. Dans 30 jours t'auras une forêt. Patience. 🌳",
+/* 16 mai   */ "Les petites routines font les grandes vies. Citation de moi. Classe non ? 😄",
+/* 17 mai   */ "Ton énergie est une ressource. Protège-la : sommeil, eau, mouvement. Basics first. ⚡",
+/* 18 mai   */ "Une journée sans sport c'est ok. Deux c'est le début d'une habitude. À toi de choisir. 🎲",
+/* 19 mai   */ "Ce que tu construis maintenant, ton toi de juillet dira merci. Promis. 🌞",
+/* 20 mai   */ "Boire de l'eau au lieu de fumer quand t'as une envie = hack de génie. Essaie. 💡",
+/* 21 mai   */ "21 jours pour créer une habitude. T'en es où toi ? Compte tes checkmarks. ✅",
+/* 22 mai   */ "Exactement 2 mois que t'as commencé. T'es pas la même. C'est le but. 🎉",
+/* 23 mai   */ "Le corps garde le score. Donne-lui de bonnes données à enregistrer. 🧬",
+/* 24 mai   */ "Week-end ou semaine, toi tu restes toi. Les habitudes pas de jours off. (enfin... presque 😅)",
+/* 25 mai   */ "Une victoire pro par jour = 365 victoires par an. Le compte est vite fait. 🏆",
+/* 26 mai   */ "T'es une commerciale. Tu sais convaincre les autres. Convaincs-toi toi-même aujourd'hui. 💼",
+/* 27 mai   */ "La routine du soir prépare la victoire du matin. Sois stratège jusqu'au bout. 🌙",
+/* 28 mai   */ "Fatiguée ? Normal. Lâches-tu pour autant ? Exactement. 🦁",
+/* 29 mai   */ "Presque fin de mai. Regarde en arrière : t'as fait du chemin. Regarde en avant : y'en a encore. ✨",
+/* 30 mai   */ "Avant-dernier jour de mai. Une habitude que tu veux solidifier avant juin ? Fais-la aujourd'hui. 💎",
+/* 31 mai   */ "Fin de mai 🎊 Bilan mental : qu'est-ce qui a marché ? Garde ça. Qu'est-ce qui a raté ? Ajuste. On reprend en juin.",
+/* 1 juin   */ "JUIN. L'été arrive. Ton énergie aussi. 🌊",
+/* 2 juin   */ "Chaque matin tu choisis : subir la journée ou la construire. Quelle option aujourd'hui ? 🔨",
+/* 3 juin   */ "La chaleur de juin c'est le meilleur prétexte pour boire ses 8 verres. Bonus : peau qui brille. 💧✨",
+/* 4 juin   */ "Sport en été = endorphines + vitamine D + bronzage. C'est trop avantageux pour s'en priver. ☀️",
+/* 5 juin   */ "Une clope en moins, un sourire en plus. Simple. Brutal. Vrai. 😊",
+/* 6 juin   */ "Le dimanche soir ne devrait pas te faire peur. Si c'est le cas, quelque chose dans ta semaine mérite d'être ajusté. 🔧",
+/* 7 juin   */ "Tu connais maintenant tes patterns. Utilise-les. 📊",
+/* 8 juin   */ "Une semaine complète de journal = une data précieuse sur toi-même. T'es ton propre coach. 🎓",
+/* 9 juin   */ "Juin c'est le mois où les habitudes de mai deviennent des réflexes. On y est. 🔄",
+/* 10 juin  */ "10 juin. Mi-année presque. T'es exactement là où tu devais être. 📍",
+/* 11 juin  */ "Le sport par temps chaud c'est dur. C'est pour ça que c'est toi qui le fais et pas tout le monde. 🌡️💪",
+/* 12 juin  */ "Ce que tu tolères définit tes standards. Relève les tiens d'un cran aujourd'hui. ⬆️",
+/* 13 juin  */ "Vendredi 13 ? Aucune superstition ne résiste à une bonne routine matinale. 🃏",
+/* 14 juin  */ "Week-end = récupération active. Pas inactive. Nuance. 🏖️",
+/* 15 juin  */ "Mi-juin. L'été est là pour de vrai. T'es prête ? T'as travaillé pour ça. ☀️🌸",
+/* 16 juin  */ "Ton futur toi d'août sera tellement reconnaissant(e) pour chaque case cochée aujourd'hui. 🎯",
+/* 17 juin  */ "Moins fumer = moins de pauses anxieuses = plus d'énergie nette dans la journée. Calcul rapide. ⚡",
+/* 18 juin  */ "Une bonne nuit de sommeil est le meilleur booster de performance qu'on ne t'a jamais vendu. 😴",
+/* 19 juin  */ "T'as tenu presque 3 mois. Ça s'appelle pas essayer. Ça s'appelle réussir. 🏅",
+/* 20 juin  */ "Solstice d'été approche. La journée la plus longue de l'année. Fais-en quelque chose de grand. 🌞",
+/* 21 juin  */ "Fête de la Musique ! Et toi, t'as fait chanter ton corps aujourd'hui ? 🎵",
+/* 22 juin  */ "Exactement 3 mois de journal. T'es une autre personne. La même, en mieux. 🦋",
+/* 23 juin  */ "La discipline c'est choisir entre ce que tu veux maintenant et ce que tu veux vraiment. 🎯",
+/* 24 juin  */ "Chaleur = tentations de flemme. Mais toi tu sais que 20 min de sport dans la fraîcheur du matin, ça change une journée. 🌅",
+/* 25 juin  */ "Avant-dernière semaine de juin. Le momentum que t'as construit ce mois-ci ? Protège-le. 🔒",
+/* 26 juin  */ "Une victoire pro aujourd'hui. Une seule. Mais une vraie. 🏆",
+/* 27 juin  */ "Le repos fait partie de la performance. Pas l'excuse. La stratégie. 😌",
+/* 28 juin  */ "Presque juillet. T'arrives à l'été avec des habitudes. Beaucoup de gens arrivent à l'été avec juste un bronzage. 😄",
+/* 29 juin  */ "Ce journal c'est la preuve que tu te prends au sérieux. Continue. 📖",
+/* 30 juin  */ "Fin de juin. 🎊 T'as traversé un mois entier. Note mentalement : qu'est-ce que tu gardes pour juillet ?",
+/* 1 juil   */ "JUILLET. L'été à fond. Toi à fond. Ça match. 🌊☀️",
+/* 2 juil   */ "Vacances ou boulot, les habitudes voyagent avec toi. Elles sont dans ta valise. 🧳",
+/* 3 juil   */ "Boire de l'eau en été c'est pas optionnel. C'est survie + performance + peau. Triple win. 💧",
+/* 4 juil   */ "Le sport en plein air en juillet c'est gratuit et magnifique. Zéro excuse. 🌳",
+/* 5 juil   */ "T'es à +3 mois de pratique. Les neurones ont câblé les nouvelles habitudes. Continue d'arroser. 🧠",
+/* 6 juil   */ "Un dimanche de juillet bien utilisé = une semaine lancée en flèche. 🚀",
+/* 7 juil   */ "Fumer c'est souvent plus une habitude sociale qu'une vraie envie. Observe ça aujourd'hui. 👁️",
+/* 8 juil   */ "Mi-juillet approche. La Juju de mars serait fière de voir où tu en es. Sérieusement. 💕",
+/* 9 juil   */ "Chaque jour dans ce journal c'est une donnée de plus sur ce qui te fait du bien. T'es ton propre labo. 🔬",
+/* 10 juil  */ "10 juillet. 110 jours de journal. T'es dans le top 1% des gens qui tiennent leurs engagements. 🥇",
+/* 11 juil  */ "La routine d'été peut être différente de la routine d'hiver. L'essentiel c'est qu'elle existe. 🌸",
+/* 12 juil  */ "Ton corps en juillet est le résultat de tes choix d'avril. Dans 3 mois tu récolteras octobre. 🍂",
+/* 13 juil  */ "Veille du 14. Demain c'est fête nationale. Aujourd'hui c'est ta fête perso. Soigne-toi. 🎆",
+/* 14 juil  */ "Bonne fête nationale ! Et bonne fête à toi — 114 jours de travail sur toi-même. C'est ton vrai feu d'artifice. 🎇",
+/* 15 juil  */ "Mi-juillet. Check rapide : tes habitudes tiennent-elles sous la chaleur et les vacances ? Si oui, elles sont gravées. 🔥",
+/* 16 juil  */ "Les meilleurs investissements sont ceux qu'on fait sur soi-même. ROI garanti. 📈",
+/* 17 juil  */ "Une journée sans se plaindre = une journée où tu reprends du pouvoir. Essaie. 💎",
+/* 18 juil  */ "Été = slowdown autorisé. Mais pas arrêt total. Garde le fil. 🧵",
+/* 19 juil  */ "T'approches de la fin du journal. Mais pas de la fin des habitudes — elles, elles continuent. ♾️",
+/* 20 juil  */ "20 juillet. Dans 11 jours ce chapitre se ferme. Le suivant sera encore mieux. 📚",
+/* 21 juil  */ "Chaque mantra que t'as lu depuis mars, t'en as retenu au moins un. Lequel ? 🌟",
+/* 22 juil  */ "4 mois de journal. T'es pas la même qu'en mars. C'était exactement le but. 🦋",
+/* 23 juil  */ "Les derniers jours d'un chapitre méritent autant d'attention que les premiers. Finis fort. 💪",
+/* 24 juil  */ "Boire ses 8 verres d'eau jusqu'au bout. Parce que les fondamentaux ne prennent pas de vacances. 💧",
+/* 25 juil  */ "Plus qu'une semaine. Ton streak compte jusqu'au dernier jour. Tiens-le. 🔥",
+/* 26 juil  */ "Ce que t'as construit ces 4 mois : une version de toi plus disciplinée, plus consciente, plus forte. Garde-la. 🏰",
+/* 27 juil  */ "Avant-dernière semaine. Continue comme si c'était le premier jour. Même énergie. ⚡",
+/* 28 juil  */ "J-3. Trois jours pour finir en beauté ce que t'as commencé en mars. Tu mérites ce finish. 🎯",
+/* 29 juil  */ "J-2. Demain avant-dernier jour. Ce soir dors bien — t'es presque au bout. 🌙",
+/* 30 juil  */ "J-1. Dernier vrai jour de remplissage avant le bilan. Fais-le impeccable. ✨",
+/* 31 juil  */ "DERNIER JOUR 🎊🎉 4 mois et 10 jours de journal. T'as fait quelque chose de rare : tu as tenu. Maintenant tu sais que tu peux. Ce chapitre se ferme — le suivant commence demain. Fière de toi, Juju. 💖"
 ];
 
 /* =========================================================
@@ -766,480 +497,331 @@ let curIdx = 0;
 let toastTmr = null;
 let saveTmr  = null;
 
-function key(date) {
-  return `juju_${date.getFullYear()}_${date.getMonth()}_${date.getDate()}`;
-}
-function load(date) {
-  try { return JSON.parse(localStorage.getItem(key(date))) || {}; }
-  catch { return {}; }
-}
-function save(date, data) {
-  localStorage.setItem(key(date), JSON.stringify(data));
-  showToast();
-}
-function patch(field, val) {
-  const d = DAYS[curIdx];
-  const data = load(d);
-  data[field] = val;
-  save(d, data);
-  refreshProgress(data);
-  refreshDots();
-  refreshStreak();
+function key(date){ return `juju_${date.getFullYear()}_${date.getMonth()}_${date.getDate()}`; }
+function load(date){ try{ return JSON.parse(localStorage.getItem(key(date)))||{}; }catch{ return {}; } }
+function save(date,data){ localStorage.setItem(key(date),JSON.stringify(data)); showToast(); }
+function patch(field,val){
+  const d=DAYS[curIdx]; const data=load(d);
+  data[field]=val; save(d,data);
+  refreshProgress(data); refreshDots(); refreshStreak();
   scheduleSyncToAirtable();
 }
 
 /* =========================================================
    TOAST
    ========================================================= */
-function showToast() {
-  const el = document.getElementById('toast');
+function showToast(){
+  const el=document.getElementById('toast');
   el.classList.add('show');
   clearTimeout(toastTmr);
-  toastTmr = setTimeout(() => el.classList.remove('show'), 1500);
+  toastTmr=setTimeout(()=>el.classList.remove('show'),1500);
 }
 
 /* =========================================================
-   FIELD SAVE (debounced)
+   DEBOUNCED FIELD SAVE
    ========================================================= */
-function saveField(field, val) {
+function saveField(field,val){
   clearTimeout(saveTmr);
-  saveTmr = setTimeout(() => patch(field, val), 400);
+  saveTmr=setTimeout(()=>patch(field,val),400);
 }
 
 /* =========================================================
    NAVIGATION
    ========================================================= */
-function go(dir) {
-  const n = curIdx + dir;
-  if (n < 0 || n >= DAYS.length) return;
-  curIdx = n;
-  renderDay();
-  syncMonthTab();
-  scrollDotVisible(curIdx);
+function go(dir){
+  const n=curIdx+dir;
+  if(n<0||n>=DAYS.length)return;
+  curIdx=n; renderDay(); syncMonthTab(); scrollDotVisible(curIdx);
 }
-
-function jumpTo(idx) {
-  curIdx = idx;
-  renderDay();
+function jumpTo(idx){ curIdx=idx; renderDay(); syncMonthTab(); }
+function switchMonth(m){
+  const idx=DAYS.findIndex(d=>d.getMonth()===m);
+  if(idx>=0){curIdx=idx;renderDay();scrollDotVisible(idx);}
   syncMonthTab();
 }
-
-function switchMonth(m) {
-  const tgt = m === 'mars' ? 2 : 3;
-  const idx = DAYS.findIndex(d => d.getMonth() === tgt);
-  if (idx >= 0) { curIdx = idx; renderDay(); scrollDotVisible(idx); }
-  syncMonthTab();
-}
-
-function syncMonthTab() {
-  const m = DAYS[curIdx].getMonth() === 2 ? 'mars' : 'avril';
-  document.getElementById('tab-mars').classList.toggle('active',  m === 'mars');
-  document.getElementById('tab-avril').classList.toggle('active', m === 'avril');
+function syncMonthTab(){
+  const m=DAYS[curIdx].getMonth();
+  ['tab-mars','tab-avril','tab-mai','tab-juin','tab-juil'].forEach((id,i)=>{
+    document.getElementById(id).classList.toggle('active',[2,3,4,5,6][i]===m);
+  });
 }
 
 /* =========================================================
    DOTS
    ========================================================= */
-function buildDots() {
-  const strip = document.getElementById('dotStrip');
-  strip.innerHTML = '';
-  const today = todayNorm();
-  DAYS.forEach((d, i) => {
-    const data = load(d);
-    const pct  = progress(data);
-    const el   = document.createElement('div');
-    el.className = 'day-dot';
-    el.dataset.di = i;
-    const isToday  = d.getTime() === today.getTime();
-    const isActive = i === curIdx;
-    const isDone   = pct >= 55 && d < today && !isActive;
-    if (isActive) el.classList.add('is-active');
-    else if (isDone) el.classList.add('is-done');
-    else if (isToday) el.classList.add('is-today');
-    el.innerHTML = `<div class="d-circle">${isDone ? '' : d.getDate()}</div>
-                    <div class="d-label">${DAY_FR[d.getDay()].slice(0,2)}</div>`;
-    el.onclick = () => jumpTo(i);
+function buildDots(){
+  const strip=document.getElementById('dotStrip');
+  strip.innerHTML='';
+  const today=todayNorm();
+  DAYS.forEach((d,i)=>{
+    const data=load(d); const pct=progress(data);
+    const el=document.createElement('div');
+    el.className='day-dot'; el.dataset.di=i;
+    const isToday=d.getTime()===today.getTime();
+    const isActive=i===curIdx;
+    const isDone=pct>=55&&d<today&&!isActive;
+    if(isActive)el.classList.add('is-active');
+    else if(isDone)el.classList.add('is-done');
+    else if(isToday)el.classList.add('is-today');
+    el.innerHTML=`<div class="d-circle">${isDone?'':d.getDate()}</div><div class="d-label">${DAY_FR[d.getDay()].slice(0,2)}</div>`;
+    el.onclick=()=>jumpTo(i);
     strip.appendChild(el);
   });
 }
-
-function refreshDots() {
-  const today = todayNorm();
-  document.querySelectorAll('.day-dot').forEach((el, i) => {
-    const d     = DAYS[i];
-    const data  = load(d);
-    const pct   = progress(data);
-    const isActive = i === curIdx;
-    const isToday  = d.getTime() === today.getTime();
-    const isDone   = pct >= 55 && d < today && !isActive;
-    el.className = 'day-dot' +
-      (isActive ? ' is-active' : isDone ? ' is-done' : isToday ? ' is-today' : '');
-    const circle = el.querySelector('.d-circle');
-    circle.textContent = isDone ? '' : d.getDate();
+function refreshDots(){
+  const today=todayNorm();
+  document.querySelectorAll('.day-dot').forEach((el,i)=>{
+    const d=DAYS[i]; const pct=progress(load(d));
+    const isActive=i===curIdx; const isToday=d.getTime()===today.getTime();
+    const isDone=pct>=55&&d<today&&!isActive;
+    el.className='day-dot'+(isActive?' is-active':isDone?' is-done':isToday?' is-today':'');
+    el.querySelector('.d-circle').textContent=isDone?'':d.getDate();
   });
 }
-
-function scrollDotVisible(idx) {
-  const el = document.querySelector(`.day-dot[data-di="${idx}"]`);
-  if (el) el.scrollIntoView({ behavior:'smooth', inline:'center', block:'nearest' });
+function scrollDotVisible(idx){
+  const el=document.querySelector(`.day-dot[data-di="${idx}"]`);
+  if(el)el.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
 }
 
 /* =========================================================
    RENDER DAY
    ========================================================= */
-function renderDay() {
-  const d    = DAYS[curIdx];
-  const data = load(d);
-
-  // Header
-  document.getElementById('dhLabel').textContent = DAY_FR[d.getDay()];
-  document.getElementById('dhNum').textContent   = d.getDate();
-  document.getElementById('dhMonth').textContent = `${MON_FR[d.getMonth()]} ${d.getFullYear()}`;
-
-  // Mantra
-  document.getElementById('mantraEl').textContent = MANTRAS[curIdx] || '✨ C\'est une nouvelle journée. Make it count.';
-
-  // Nav buttons
-  document.getElementById('prevBtn').disabled = curIdx === 0;
-  document.getElementById('nextBtn').disabled = curIdx === DAYS.length - 1;
-
-  // Checkboxes
-  document.querySelectorAll('.ck-item[data-key]').forEach(el => {
-    el.classList.toggle('is-checked', !!data[el.dataset.key]);
-  });
-
-  // Text fields
-  [['t_matin_feeling','matin_feeling'],['t_hydra_note','hydra_note'],
-   ['t_sport_quoi','sport_quoi'],['t_work_win','work_win'],
-   ['t_fiere','fiere'],['t_amelio','amelio'],['t_libre','libre'],
+function renderDay(){
+  const d=DAYS[curIdx]; const data=load(d);
+  document.getElementById('dhLabel').textContent=DAY_FR[d.getDay()];
+  document.getElementById('dhNum').textContent=d.getDate();
+  document.getElementById('dhMonth').textContent=`${MON_FR[d.getMonth()]} ${d.getFullYear()}`;
+  document.getElementById('mantraEl').textContent=MANTRAS[curIdx]||'✨ C\'est une nouvelle journée. Make it count.';
+  document.getElementById('prevBtn').disabled=curIdx===0;
+  document.getElementById('nextBtn').disabled=curIdx===DAYS.length-1;
+  document.querySelectorAll('.ck-item[data-key]').forEach(el=>el.classList.toggle('is-checked',!!data[el.dataset.key]));
+  [['t_matin_feeling','matin_feeling'],['t_hydra_note','hydra_note'],['t_sport_quoi','sport_quoi'],
+   ['t_work_win','work_win'],['t_fiere','fiere'],['t_amelio','amelio'],['t_libre','libre'],
    ['t_sleep_bed','sleep_bed'],['t_sleep_wake','sleep_wake']
-  ].forEach(([id,fk]) => {
-    const el = document.getElementById(id);
-    if (el) el.value = data[fk] || '';
-  });
-
-  // Water
-  const w = data.water || [];
-  document.querySelectorAll('.w-drop').forEach((el,i) =>
-    el.classList.toggle('on', !!w[i])
-  );
-  renderWaterMsg((w.filter(Boolean).length));
-
-  // Smoke
-  const smk = data.smoke || 0;
-  document.getElementById('smokeNum').textContent = smk;
-  renderSmokeMsg(smk);
-
-  // Intensity
-  document.querySelectorAll('.int-btn').forEach(el =>
-    el.classList.toggle('on', el.dataset.iv === data.sport_int)
-  );
-
-  // Sleep
+  ].forEach(([id,fk])=>{ const el=document.getElementById(id); if(el)el.value=data[fk]||''; });
+  const w=data.water||[];
+  document.querySelectorAll('.w-drop').forEach((el,i)=>el.classList.toggle('on',!!w[i]));
+  renderWaterMsg(w.filter(Boolean).length);
+  const smk=data.smoke||0;
+  document.getElementById('smokeNum').textContent=smk; renderSmokeMsg(smk);
+  document.querySelectorAll('.int-btn').forEach(el=>el.classList.toggle('on',el.dataset.iv===data.sport_int));
   calcSleep();
-
-  // Mood
-  document.querySelectorAll('.mood-btn').forEach(el =>
-    el.classList.toggle('on', el.dataset.mood === data.mood)
-  );
-
-  // Dots highlight
-  refreshDots();
-  refreshProgress(data);
+  document.querySelectorAll('.mood-btn').forEach(el=>el.classList.toggle('on',el.dataset.mood===data.mood));
+  refreshDots(); refreshProgress(data);
 }
 
 /* =========================================================
    CHECKBOXES
    ========================================================= */
-document.querySelectorAll('.ck-item[data-key]').forEach(el => {
-  el.addEventListener('click', () => {
-    const was = el.classList.contains('is-checked');
-    el.classList.toggle('is-checked', !was);
-    patch(el.dataset.key, !was);
+document.querySelectorAll('.ck-item[data-key]').forEach(el=>{
+  el.addEventListener('click',()=>{
+    const was=el.classList.contains('is-checked');
+    el.classList.toggle('is-checked',!was);
+    patch(el.dataset.key,!was);
   });
 });
 
 /* =========================================================
    WATER
    ========================================================= */
-function toggleWater(i) {
-  const d    = DAYS[curIdx];
-  const data = load(d);
-  if (!data.water) data.water = Array(8).fill(false);
-  data.water[i] = !data.water[i];
-  save(d, data);
-  document.querySelectorAll('.w-drop').forEach((el,j) =>
-    el.classList.toggle('on', !!data.water[j])
-  );
-  const cnt = data.water.filter(Boolean).length;
-  renderWaterMsg(cnt);
-  refreshProgress(data);
-  refreshDots();
-  refreshStreak();
+function toggleWater(i){
+  const d=DAYS[curIdx]; const data=load(d);
+  if(!data.water)data.water=Array(8).fill(false);
+  data.water[i]=!data.water[i]; save(d,data);
+  document.querySelectorAll('.w-drop').forEach((el,j)=>el.classList.toggle('on',!!data.water[j]));
+  const cnt=data.water.filter(Boolean).length;
+  renderWaterMsg(cnt); refreshProgress(data); refreshDots(); refreshStreak();
+  scheduleSyncToAirtable();
 }
-
-function renderWaterMsg(n) {
-  const msgs = ['','C\'est un début ! 🌱','Déjà 2, bien ! 💪','Halfway ! 🔥',
-    'Plus que la moitié ! ✨','Super ! Continue 💧','Presque ! 🎯',
-    'Encore un petit effort ! 🌊','OBJECTIF ATTEINT 🏆🎉'];
-  document.getElementById('waterMsg').textContent = n > 0 ? `${n}/8 verres — ${msgs[n]||''}` : '';
+function renderWaterMsg(n){
+  const msgs=['','C\'est un début ! 🌱','Déjà 2, bien ! 💪','Halfway ! 🔥','Plus que la moitié ! ✨',
+    'Super ! Continue 💧','Presque ! 🎯','Encore un petit effort ! 🌊','OBJECTIF ATTEINT 🏆🎉'];
+  document.getElementById('waterMsg').textContent=n>0?`${n}/8 verres — ${msgs[n]||''}`:'';
 }
 
 /* =========================================================
    SMOKE
    ========================================================= */
-function adjSmoke(v) {
-  const d    = DAYS[curIdx];
-  const data = load(d);
-  data.smoke = Math.max(0, (data.smoke||0) + v);
-  save(d, data);
-  document.getElementById('smokeNum').textContent = data.smoke;
-  renderSmokeMsg(data.smoke);
-  refreshProgress(data);
-  refreshDots();
-  refreshStreak();
+function adjSmoke(v){
+  const d=DAYS[curIdx]; const data=load(d);
+  data.smoke=Math.max(0,(data.smoke||0)+v); save(d,data);
+  document.getElementById('smokeNum').textContent=data.smoke;
+  renderSmokeMsg(data.smoke); refreshProgress(data); refreshDots(); refreshStreak();
+  scheduleSyncToAirtable();
 }
-
-function renderSmokeMsg(n) {
-  const el = document.getElementById('smokeMsg');
-  el.className = 'sm-msg show';
-  if (n === 0) {
-    el.textContent = '🎉 ZÉRO ! T\'es une reine aujourd\'hui.';
-    el.classList.add('sm-great');
-  } else if (n <= 3) {
-    el.textContent = `💪 ${n} seulement. Tu réduis — c'est ça le chemin.`;
-    el.className = 'sm-msg show sm-good';
-  } else if (n <= 7) {
-    el.textContent = `👀 ${n}… On peut faire mieux demain. T'as les ressources.`;
-    el.className = 'sm-msg show sm-ok';
-  } else {
-    el.textContent = `🫂 Journée difficile. Demain, enlèves-en juste une. C'est tout.`;
-    el.className = 'sm-msg show sm-bad';
-  }
+function renderSmokeMsg(n){
+  const el=document.getElementById('smokeMsg'); el.className='sm-msg show';
+  if(n===0){el.textContent='🎉 ZÉRO ! T\'es une reine aujourd\'hui.';el.classList.add('sm-great');}
+  else if(n<=3){el.textContent=`💪 ${n} seulement. Tu réduis — c'est ça le chemin.`;el.className='sm-msg show sm-good';}
+  else if(n<=7){el.textContent=`👀 ${n}… On peut faire mieux demain.`;el.className='sm-msg show sm-ok';}
+  else{el.textContent='🫂 Journée difficile. Demain, enlèves-en juste une. C\'est tout.';el.className='sm-msg show sm-bad';}
 }
 
 /* =========================================================
    INTENSITY
    ========================================================= */
-function setInt(v, el) {
-  document.querySelectorAll('.int-btn').forEach(b => b.classList.remove('on'));
-  el.classList.add('on');
-  patch('sport_int', v);
+function setInt(v,el){
+  document.querySelectorAll('.int-btn').forEach(b=>b.classList.remove('on'));
+  el.classList.add('on'); patch('sport_int',v);
 }
 
 /* =========================================================
-   SLEEP CALC
+   SLEEP
    ========================================================= */
-function calcSleep() {
-  const bed  = document.getElementById('t_sleep_bed').value;
-  const wake = document.getElementById('t_sleep_wake').value;
-  const el   = document.getElementById('sleepRes');
-  if (!bed || !wake) { el.textContent = ''; return; }
-  const [bh,bm] = bed.split(':').map(Number);
-  const [wh,wm] = wake.split(':').map(Number);
-  let mins = (wh*60+wm) - (bh*60+bm);
-  if (mins < 0) mins += 1440;
-  const h = Math.floor(mins/60), m = mins%60;
-  const ico = h >= 7 ? '😴✨' : h >= 6 ? '🙂' : h >= 5 ? '😐' : '😫';
-  el.textContent = `${ico}  ${h}h${m > 0 ? m+'min' : ''} de sommeil`;
+function calcSleep(){
+  const bed=document.getElementById('t_sleep_bed').value;
+  const wake=document.getElementById('t_sleep_wake').value;
+  const el=document.getElementById('sleepRes');
+  if(!bed||!wake){el.textContent='';return;}
+  const[bh,bm]=bed.split(':').map(Number); const[wh,wm]=wake.split(':').map(Number);
+  let mins=(wh*60+wm)-(bh*60+bm); if(mins<0)mins+=1440;
+  const h=Math.floor(mins/60),m=mins%60;
+  const ico=h>=7?'😴✨':h>=6?'🙂':h>=5?'😐':'😫';
+  el.textContent=`${ico}  ${h}h${m>0?m+'min':''} de sommeil`;
 }
 
 /* =========================================================
    MOOD
    ========================================================= */
-function setMood(emoji, el) {
-  document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('on'));
-  el.classList.add('on');
-  patch('mood', emoji);
+function setMood(emoji,el){
+  document.querySelectorAll('.mood-btn').forEach(b=>b.classList.remove('on'));
+  el.classList.add('on'); patch('mood',emoji);
 }
 
 /* =========================================================
    PROGRESS
    ========================================================= */
-const CK_KEYS = ['m_snooze','m_tel','m_eau','m_skin','m_calme',
-                 's_fait','s_resist',
-                 'w_todo','w_calls','w_focus',
-                 'e_diner','e_ecran','e_calme'];
-const TX_KEYS = ['matin_feeling','sport_quoi','work_win','fiere'];
-
-function progress(data) {
-  let done = 0, total = CK_KEYS.length + TX_KEYS.length + 1; // +1 mood
-  CK_KEYS.forEach(k => { if (data[k]) done++; });
-  TX_KEYS.forEach(k => { if (data[k]?.trim()) done++; });
-  if (data.mood) done++;
-  const w = (data.water||[]).filter(Boolean).length;
-  done  += Math.min(w, 4); total += 4;
+const CK_KEYS=['m_snooze','m_tel','m_eau','m_skin','m_calme','s_fait','s_resist','w_todo','w_calls','w_focus','e_diner','e_ecran','e_calme'];
+const TX_KEYS=['matin_feeling','sport_quoi','work_win','fiere'];
+function progress(data){
+  let done=0,total=CK_KEYS.length+TX_KEYS.length+1;
+  CK_KEYS.forEach(k=>{if(data[k])done++;});
+  TX_KEYS.forEach(k=>{if(data[k]?.trim())done++;});
+  if(data.mood)done++;
+  const w=(data.water||[]).filter(Boolean).length;
+  done+=Math.min(w,4);total+=4;
   return Math.round((done/total)*100);
 }
-
-function refreshProgress(data) {
-  const pct = progress(data);
-  document.getElementById('progFill').style.width = `${pct}%`;
-  document.getElementById('progTxt').textContent  = `${pct} %`;
+function refreshProgress(data){
+  const pct=progress(data);
+  document.getElementById('progFill').style.width=`${pct}%`;
+  document.getElementById('progTxt').textContent=`${pct} %`;
 }
 
 /* =========================================================
    STREAK
    ========================================================= */
-function todayNorm() {
-  const t = new Date(); t.setHours(0,0,0,0); return t;
-}
-
-function refreshStreak() {
-  const today = todayNorm();
-  let streak = 0;
-  for (let i = DAYS.length-1; i >= 0; i--) {
-    const d = DAYS[i];
-    if (d > today) continue;
-    if (progress(load(d)) >= 30) streak++;
-    else break;
+function todayNorm(){ const t=new Date();t.setHours(0,0,0,0);return t; }
+function refreshStreak(){
+  const today=todayNorm(); let streak=0;
+  for(let i=DAYS.length-1;i>=0;i--){
+    const d=DAYS[i]; if(d>today)continue;
+    if(progress(load(d))>=30)streak++; else break;
   }
-  document.getElementById('streakEl').textContent = `🔥 ${streak}j`;
+  document.getElementById('streakEl').textContent=`🔥 ${streak}j`;
 }
-
-/* =========================================================
-   INIT
-   ========================================================= */
-function init() {
-  const today = todayNorm();
-  let idx = DAYS.findIndex(d => { const x=new Date(d); x.setHours(0,0,0,0); return x.getTime()===today.getTime(); });
-  if (idx === -1) idx = today < DAYS[0] ? 0 : DAYS.length-1;
-  curIdx = idx;
-
-  buildDots();
-  renderDay();
-  syncMonthTab();
-  refreshStreak();
-  setTimeout(() => scrollDotVisible(curIdx), 150);
-}
-
-
 
 /* =========================================================
    AIRTABLE SYNC
-   Base: appITdhAzHBgYWW1e / Table: tblz3cnfFrFl27758
    ========================================================= */
 const AT_BASE  = 'appITdhAzHBgYWW1e';
 const AT_TABLE = 'tblz3cnfFrFl27758';
 const AT_FIELDS = {
-  date:       'fldGybdmvyh2RtiT7',
-  mood:       'fldehm2kKEokwDu7m',
-  water:      'flddlQGGkJ8OW06wz',
-  smoke:      'fldb3nqkPnkKnpzZq',
-  progress:   'fldDUIDdK2Cret8XK',
-  sport:      'fldTi60Pp7aHCR2Zt',
-  feeling:    'fldyLj8TuyozprMbg',
-  win:        'fld2l1KGaHgDDWtTV',
-  fierte:     'fldFGlD73wQSy98OE',
-  amelio:     'fldS1o033IJszawa7',
-  bedtime:    'fldC4csHl98vDciB6',
-  waketime:   'fldkLHSO91LHI7Brp'
+  date:'fldGybdmvyh2RtiT7', mood:'fldehm2kKEokwDu7m', water:'flddlQGGkJ8OW06wz',
+  smoke:'fldb3nqkPnkKnpzZq', progress:'fldDUIDdK2Cret8XK', sport:'fldTi60Pp7aHCR2Zt',
+  feeling:'fldyLj8TuyozprMbg', win:'fld2l1KGaHgDDWtTV', fierte:'fldFGlD73wQSy98OE',
+  amelio:'fldS1o033IJszawa7', bedtime:'fldC4csHl98vDciB6', waketime:'fldkLHSO91LHI7Brp'
 };
 
-function getAtToken() { return localStorage.getItem('journal_at_token') || ''; }
+function getAtToken(){ return localStorage.getItem('journal_at_token')||''; }
 
-function saveAtToken() {
-  const val = document.getElementById('atTokenInput').value.trim();
-  if (!val) return;
-  localStorage.setItem('journal_at_token', val);
-  showAtStatus('✅ Token enregistré — sync activée !', '#D0F0E0', '#1D7A50');
+function saveAtToken(){
+  const val=document.getElementById('atTokenInput').value.trim();
+  if(!val)return;
+  localStorage.setItem('journal_at_token',val);
+  showAtStatus('✅ Token enregistré — sync activée !','#D0F0E0','#1D7A50');
 }
 
-function toggleSettings() {
-  const m = document.getElementById('settingsModal');
-  const isOpen = m.style.display === 'flex';
-  m.style.display = isOpen ? 'none' : 'flex';
-  if (!isOpen) {
-    const tok = getAtToken();
-    const inp = document.getElementById('atTokenInput');
-    inp.value = tok ? '••••••••••••' : '';
-    const st = document.getElementById('atSyncStatus');
-    if (tok) {
-      showAtStatus('✅ Token configuré — sync active', '#D0F0E0', '#1D7A50');
-    } else {
-      st.style.display = 'none';
-    }
+function toggleSettings(){
+  const m=document.getElementById('settingsModal');
+  const isOpen=m.style.display==='flex';
+  m.style.display=isOpen?'none':'flex';
+  if(!isOpen){
+    const tok=getAtToken();
+    document.getElementById('atTokenInput').value=tok?'••••••••••••':'';
+    if(tok)showAtStatus('✅ Token configuré — sync active','#D0F0E0','#1D7A50');
+    else document.getElementById('atSyncStatus').style.display='none';
   }
 }
 
-function showAtStatus(msg, bg, color) {
-  const el = document.getElementById('atSyncStatus');
-  el.style.display = 'block';
-  el.style.background = bg || '#FFF0F4';
-  el.style.color = color || 'var(--pink)';
-  el.textContent = msg;
+function showAtStatus(msg,bg,color){
+  const el=document.getElementById('atSyncStatus');
+  el.style.display='block'; el.style.background=bg||'#FFF0F4';
+  el.style.color=color||'var(--pink)'; el.textContent=msg;
 }
 
-let atSyncTimer = null;
-function scheduleSyncToAirtable() {
-  clearTimeout(atSyncTimer);
-  atSyncTimer = setTimeout(() => syncDayToAirtable(DAYS[curIdx]), 1200);
-}
+let atSyncTimer=null;
+function scheduleSyncToAirtable(){ clearTimeout(atSyncTimer); atSyncTimer=setTimeout(()=>syncDayToAirtable(DAYS[curIdx]),1200); }
 
-async function syncDayToAirtable(date) {
-  const token = getAtToken();
-  if (!token || token === '••••••••••••') return;
-  const data = load(date);
-  const dateStr = `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;
-  const fields = {};
-  fields[AT_FIELDS.date]     = dateStr;
-  fields[AT_FIELDS.mood]     = data.mood || '';
-  fields[AT_FIELDS.water]    = (data.water||[]).filter(Boolean).length;
-  fields[AT_FIELDS.smoke]    = data.smoke || 0;
-  fields[AT_FIELDS.progress] = progress(data);
-  fields[AT_FIELDS.sport]    = data.sport_quoi || '';
-  fields[AT_FIELDS.feeling]  = data.matin_feeling || '';
-  fields[AT_FIELDS.win]      = data.work_win || '';
-  fields[AT_FIELDS.fierte]   = data.fiere || '';
-  fields[AT_FIELDS.amelio]   = data.amelio || '';
-  fields[AT_FIELDS.bedtime]  = data.sleep_bed || '';
-  fields[AT_FIELDS.waketime] = data.sleep_wake || '';
-
-  try {
-    const res = await fetch(`https://api.airtable.com/v0/${AT_BASE}/${AT_TABLE}`, {
-      method: 'PATCH',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        performUpsert: { fieldsToMergeOn: [AT_FIELDS.date] },
-        records: [{ fields }]
-      })
+async function syncDayToAirtable(date){
+  const token=getAtToken(); if(!token||token==='••••••••••••')return;
+  const data=load(date);
+  const dateStr=`${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;
+  const fields={};
+  fields[AT_FIELDS.date]=dateStr; fields[AT_FIELDS.mood]=data.mood||'';
+  fields[AT_FIELDS.water]=(data.water||[]).filter(Boolean).length;
+  fields[AT_FIELDS.smoke]=data.smoke||0; fields[AT_FIELDS.progress]=progress(data);
+  fields[AT_FIELDS.sport]=data.sport_quoi||''; fields[AT_FIELDS.feeling]=data.matin_feeling||'';
+  fields[AT_FIELDS.win]=data.work_win||''; fields[AT_FIELDS.fierte]=data.fiere||'';
+  fields[AT_FIELDS.amelio]=data.amelio||''; fields[AT_FIELDS.bedtime]=data.sleep_bed||'';
+  fields[AT_FIELDS.waketime]=data.sleep_wake||'';
+  try{
+    await fetch(`https://api.airtable.com/v0/${AT_BASE}/${AT_TABLE}`,{
+      method:'PATCH',
+      headers:{'Authorization':`Bearer ${token}`,'Content-Type':'application/json'},
+      body:JSON.stringify({performUpsert:{fieldsToMergeOn:[AT_FIELDS.date]},records:[{fields}]})
     });
-    if (!res.ok) { console.warn('Airtable sync failed', res.status); }
-  } catch(e) { console.warn('Airtable sync error', e); }
+  }catch(e){console.warn('Airtable sync error',e);}
 }
-
 
 /* =========================================================
    LOGIN
    ========================================================= */
-const PASSWORD    = 'Juju1506';
+const PASSWORD    = 'Juju2026✨';
 const SESSION_KEY = 'journal_auth_v1';
 
-function doLogin() {
-  const input = document.getElementById('pwdInput');
-  const errEl = document.getElementById('loginError');
-  if (input.value === PASSWORD) {
-    sessionStorage.setItem(SESSION_KEY, '1');
-    document.getElementById('loginScreen').style.display = 'none';
-    document.getElementById('app').style.display = 'block';
+function doLogin(){
+  const input=document.getElementById('pwdInput');
+  const errEl=document.getElementById('loginError');
+  if(input.value===PASSWORD){
+    sessionStorage.setItem(SESSION_KEY,'1');
+    document.getElementById('loginScreen').style.display='none';
+    document.getElementById('app').style.display='block';
     init();
   } else {
     input.classList.add('error');
-    errEl.textContent = 'Mot de passe incorrect 🙅‍♀️';
-    input.value = '';
-    setTimeout(() => { input.classList.remove('error'); errEl.textContent = ''; }, 1800);
+    errEl.textContent='Mot de passe incorrect 🙅‍♀️';
+    input.value='';
+    setTimeout(()=>{input.classList.remove('error');errEl.textContent='';},1800);
   }
 }
-document.getElementById('pwdInput').addEventListener('keydown', e => {
-  if (e.key === 'Enter') doLogin();
-});
+document.getElementById('pwdInput').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
 
-if (sessionStorage.getItem(SESSION_KEY) === '1') {
-  document.getElementById('loginScreen').style.display = 'none';
-  document.getElementById('app').style.display = 'block';
+/* =========================================================
+   INIT
+   ========================================================= */
+function init(){
+  const today=todayNorm();
+  let idx=DAYS.findIndex(d=>{const x=new Date(d);x.setHours(0,0,0,0);return x.getTime()===today.getTime();});
+  if(idx===-1)idx=today<DAYS[0]?0:DAYS.length-1;
+  curIdx=idx;
+  buildDots(); renderDay(); syncMonthTab(); refreshStreak();
+  setTimeout(()=>scrollDotVisible(curIdx),150);
+}
+
+if(sessionStorage.getItem(SESSION_KEY)==='1'){
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('app').style.display='block';
   init();
 }
 </script>
