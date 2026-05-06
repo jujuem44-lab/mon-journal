@@ -557,7 +557,7 @@ function switchMonth(m){
 }
 function syncMonthTab(){
   const m=DAYS[curIdx].getMonth();
-  ['tab-mars','tab-avril','tab-mai','tab-juin','tab-juil'].forEach((id,i)=>{
+  ['tab-2','tab-3','tab-4','tab-5','tab-6'].forEach((id,i)=>{
     document.getElementById(id).classList.toggle('active',[2,3,4,5,6][i]===m);
   });
 }
@@ -607,9 +607,8 @@ function renderDay(){
   document.getElementById('dhLabel').textContent=DAY_FR[d.getDay()];
   document.getElementById('dhNum').textContent=d.getDate();
   document.getElementById('dhMonth').textContent=`${MON_FR[d.getMonth()]} ${d.getFullYear()}`;
-  document.getElementById('mantraEl').textContent=MANTRAS[curIdx]||
-  document.getElementById("questionDuJour").textContent=QUESTIONS[curIdx]||"Quel est ton ressenti aujourd'hui ?";
-  document.getElementById('mantraEl').textContent=MANTRAS[curIdx]||'✨ C\'est une nouvelle journée. Make it count.';
+  document.getElementById('mantraEl').textContent=MANTRAS[curIdx]||'\u2728 Make it count.';
+  document.getElementById('questionDuJour').textContent=QUESTIONS[curIdx]||'Quel est ton ressenti ?';
   document.getElementById('prevBtn').disabled=curIdx===0;
   document.getElementById('nextBtn').disabled=curIdx===DAYS.length-1;
   document.querySelectorAll('.ck-item[data-key]').forEach(el=>el.classList.toggle('is-checked',!!data[el.dataset.key]));
