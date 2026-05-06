@@ -228,6 +228,22 @@ body{background:var(--cream);font-family:'Nunito',sans-serif;color:var(--text);m
     <div class="av-bubble" id="mantraEl">…</div>
   </div>
 
+  <!-- JOURNAL INTIME -->
+  <div class="section-divider"><span>&#9997;&#65039; Journal intime</span></div>
+
+  <div class="card" style="background:linear-gradient(135deg,#FFF4F8,#FFF8F2);border:2px solid var(--pink-l);">
+    <div style="background:var(--pink-ll);border-left:4px solid var(--pink);border-radius:0 12px 12px 0;padding:12px 15px;margin-bottom:16px;">
+      <div style="font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--pink);margin-bottom:4px;">Question du jour &#128173;</div>
+      <div style="font-family:'Fraunces',serif;font-size:.95rem;font-style:italic;color:var(--text);line-height:1.4;" id="questionDuJour">&hellip;</div>
+    </div>
+    <label class="field-label">Ma r&eacute;ponse</label>
+    <textarea class="j-input" rows="4" id="t_question_rep" placeholder="Prends le temps d'y r&eacute;pondre honn&ecirc;tement. C'est pour toi." oninput="saveField('question_rep',this.value)"></textarea>
+    <label class="field-label">Ma journ&eacute;e &mdash; ce que j'ai v&eacute;cu, ressenti, pens&eacute;</label>
+    <textarea class="j-input" rows="5" id="t_journal" placeholder="&Eacute;cris tout ce que tu veux. Tes &eacute;motions, tes pens&eacute;es, tes doutes, tes joies... Personne ne lit &ccedil;a &agrave; part toi. &#128150;" oninput="saveField('journal',this.value)"></textarea>
+  </div>
+
+  <div class="section-divider"><span>&#128170; Hygi&egrave;ne de vie</span></div>
+
   <!-- MATIN -->
   <div class="card">
     <div class="card-title"><span class="ico">🌅</span> Réveil & Matin</div>
@@ -591,11 +607,13 @@ function renderDay(){
   document.getElementById('dhLabel').textContent=DAY_FR[d.getDay()];
   document.getElementById('dhNum').textContent=d.getDate();
   document.getElementById('dhMonth').textContent=`${MON_FR[d.getMonth()]} ${d.getFullYear()}`;
+  document.getElementById('mantraEl').textContent=MANTRAS[curIdx]||
+  document.getElementById('questionDuJour').textContent=QUESTIONS[curIdx]||'Qu'est-ce que tu ressens aujourd'hui ?';
   document.getElementById('mantraEl').textContent=MANTRAS[curIdx]||'✨ C\'est une nouvelle journée. Make it count.';
   document.getElementById('prevBtn').disabled=curIdx===0;
   document.getElementById('nextBtn').disabled=curIdx===DAYS.length-1;
   document.querySelectorAll('.ck-item[data-key]').forEach(el=>el.classList.toggle('is-checked',!!data[el.dataset.key]));
-  [['t_matin_feeling','matin_feeling'],['t_hydra_note','hydra_note'],['t_sport_quoi','sport_quoi'],
+  [['t_question_rep','question_rep'],['t_journal','journal'],['t_alimentation','alimentation'],['t_matin_feeling','matin_feeling'],['t_hydra_note','hydra_note'],['t_sport_quoi','sport_quoi'],
    ['t_work_win','work_win'],['t_fiere','fiere'],['t_amelio','amelio'],['t_libre','libre'],
    ['t_sleep_bed','sleep_bed'],['t_sleep_wake','sleep_wake']
   ].forEach(([id,fk])=>{ const el=document.getElementById(id); if(el)el.value=data[fk]||''; });
@@ -691,8 +709,8 @@ function setMood(emoji,el){
 /* =========================================================
    PROGRESS
    ========================================================= */
-const CK_KEYS=['m_snooze','m_tel','m_eau','m_skin','m_calme','s_fait','s_resist','w_todo','w_calls','w_focus','e_diner','e_ecran','e_calme'];
-const TX_KEYS=['matin_feeling','sport_quoi','work_win','fiere'];
+const CK_KEYS=['m_snooze','m_tel','m_eau','m_skin','m_calme','s_fait','s_alim','s_resist','w_todo','w_calls','w_focus','e_diner','e_ecran','e_calme'];
+const TX_KEYS=['journal','question_rep','matin_feeling','sport_quoi','work_win','fiere'];
 function progress(data){
   let done=0,total=CK_KEYS.length+TX_KEYS.length+1;
   CK_KEYS.forEach(k=>{if(data[k])done++;});
@@ -783,6 +801,9 @@ async function syncDayToAirtable(date){
     });
   }catch(e){console.warn('Airtable sync error',e);}
 }
+
+
+const QUESTIONS=["Qu'est-ce qui te fait vraiment peur en ce moment — et pourquoi tu n'en parles pas ?","Si ta journée d'aujourd'hui était un film, quel serait son titre ?","Qu'est-ce que tu t'autorises à ressentir, là, maintenant ?","Quelle est la dernière fois que tu t'es sentie vraiment fière de toi ?","Qu'est-ce que tu portes en ce moment que tu n'as demandé à personne de t'aider à porter ?","Si tu pouvais changer une seule chose dans ta vie dès demain, ce serait quoi ?","Qu'est-ce que tu te dis à toi-même que tu ne dirais jamais à une amie ?","Quelle habitude de ta vie d'avant tu voudrais retrouver ?","Qu'est-ce qui te manque en ce moment ?","De quoi as-tu besoin que personne ne t'a donné cette semaine ?","Quel est le mensonge que tu te racontes le plus souvent ?","Si une amie vivait exactement ta vie, que lui conseillerais-tu ?","Qu'est-ce qui t'a surprise aujourd'hui — en bien ou en mal ?","Qu'est-ce que tu aurais fait différemment aujourd'hui ?","Quelle émotion tu as le plus du mal à accepter en toi ?","Qu'est-ce que tu fais par obligation et qui te vide ? Qu'est-ce que tu fais par plaisir et qui te remplit ?","Si tu n'avais pas peur du regard des autres, qu'est-ce que tu ferais différemment ?","Qu'est-ce qui t'énerve en ce moment — et quelle part vient vraiment de toi ?","De quoi tu as besoin pour te sentir mieux dans ton corps ?","Qu'est-ce que tu attendais de cette journée, et qu'est-ce que t'as eu à la place ?","Quelle conversation difficile tu repousses en ce moment ?","Qu'est-ce que tu as accompli cette semaine dont tu ne t'es pas félicité(e) ?","C'est quoi ton rapport à la solitude en ce moment ?","Qu'est-ce que tu remarques dans ton corps quand tu es stressée ?","Quelle est la chose la plus courageuse que tu aies faite récemment ?","Si tu devais décrire ton état d'esprit comme une météo, ça serait quoi aujourd'hui ?","Qu'est-ce que tu tolères dans ta vie que tu ne devrais pas ?","Quelle est la dernière fois que tu as vraiment ri ?","Qu'est-ce qui t'empêche de dormir — au sens propre comme au sens figuré ?","Si tu pouvais parler à la version de toi d'il y a 5 ans, que lui dirais-tu ?","Qu'est-ce qui te donne de l'énergie ? Qu'est-ce qui t'en prend ?","C'est quoi ton rapport à l'argent en ce moment — honnêtes ?","Qu'est-ce que tu veux vraiment, au fond, pour ta vie dans 2 ans ?","Qu'est-ce que tu as du mal à dire non en ce moment ?","Quelle est la chose dont tu es le plus reconnaissante aujourd'hui ?","Qu'est-ce que le sport représente pour toi — au-delà du physique ?","Quelle partie de toi tu cherches à éteindre en fumant ?","Qu'est-ce que tu ferais aujourd'hui si tu savais que tu ne pouvais pas échouer ?","Qu'est-ce qui te manque dans tes relations en ce moment ?","Quelle est la version de toi que tu veux devenir ? Elle ressemble à quoi ?","Qu'est-ce qui t'a rendue heureuse cette semaine, même brièvement ?","Si tu te donnais une note sur 10 pour prendre soin de toi ce mois-ci, ce serait combien ? Pourquoi ?","Quelle est la chose que tu n'oses pas écrire dans ce journal ?","Qu'est-ce que tu as appris sur toi-même ce mois-ci ?","De quoi tu es prête à te débarrasser — habitude, relation, croyance ?","Qu'est-ce que tu remarques quand tu es vraiment en forme ?","Quelle est la chose la plus gentille que tu aies faite pour quelqu'un récemment ?","Et pour toi-même ?","Qu'est-ce qui te stresse le plus dans ton boulot en ce moment ?","Quelle serait ta journée idéale ? Décris-la dans les détails.","C'est quoi ta relation à ton corps en ce moment ?","Qu'est-ce que tu ressens quand tu fumes — avant, pendant, après ?","Qu'est-ce qui te manque pour te sentir vraiment en sécurité dans ta vie ?","Quelle est la croyance sur toi-même que tu voudrais changer ?","Qu'est-ce que tu ferais si tu avais une journée entière juste pour toi ?","Comment tu te sens dans tes relations amicales en ce moment ?","Quelle est la chose dont tu es la plus fière dans ton parcours de commerciale ?","Qu'est-ce que tu voudrais que les gens comprennent de toi ?","Qu'est-ce qui te fait du bien que tu ne te permets pas assez souvent ?","Si tu pouvais effacer une période de ta vie, laquelle ? Et pourquoi tu ne le ferais probablement pas ?","C'est quoi pour toi le succès, aujourd'hui — pas la version des autres, la tienne ?","Quelle est la chose la plus difficile que tu traverses en silence en ce moment ?","Qu'est-ce que tu as besoin d'entendre que personne ne te dit ?","Qu'est-ce que tu aimes vraiment dans ta vie, là, maintenant ?","Quelle habitude tu aurais aimé commencer plus tôt dans ta vie ?","C'est quoi la chose que tu fais le mieux et que tu minimises trop souvent ?","Si tu devais t'écrire une lettre d'encouragement, elle commencerait comment ?","Qu'est-ce que tu peux contrôler aujourd'hui, et qu'est-ce que tu dois laisser aller ?","Comment tu te parles à toi-même quand tu rates quelque chose ?","Qu'est-ce que tu faisais il y a un an à cette période ? Qu'est-ce qui a changé ?","Si ton énergie était une batterie, à combien de % tu es là ?","Qu'est-ce que tu veux ressentir à la fin de ce mois ?","Quelle est la frontière la plus difficile à poser pour toi en ce moment ?","Qu'est-ce que tu fais pour toi, juste pour toi, sans que ça serve à rien d'autre ?","Comment tu gères la pression en ce moment ? C'est sain ou pas vraiment ?","Quelle personne dans ta vie t'inspire le plus en ce moment ? Pourquoi ?","Qu'est-ce que tu veux absolument vivre cet été ?","Quelle est ta plus grande force que tu n'utilises pas encore à 100 % ?","Si tu pouvais envoyer un message à ton toi de dans 6 mois, ce serait quoi ?","Qu'est-ce que tu as évité de faire cette semaine que tu devais faire ?","Quel est le bruit dans ta tête qui revient le plus souvent ? D'où il vient ?","C'est quoi ta plus grande victoire silencieuse — celle dont tu ne parles à personne ?","Qu'est-ce qui te rend vivante, au sens plein du terme ?","Quelle vérité tu refuses encore de regarder en face ?","Qu'est-ce que tu attendais de toi il y a 6 mois ? T'as tenu tes promesses ?","Qu'est-ce que tu voudrais que ta vie inspire à d'autres ?","Si tu pouvais te parler comme à ta meilleure amie, que te dirais-tu ce soir ?","Qu'est-ce qui t'a coûté le plus d'énergie cette semaine ?","Et qu'est-ce qui t'en a donné le plus ?","C'est quoi ta définition du bonheur, là, aujourd'hui ?","Comment tu veux te souvenir de cette période de ta vie dans 10 ans ?","Qu'est-ce que tu as envie de te promettre pour les semaines qui viennent ?","C'est quoi la chose la plus importante que t'aies accomplie depuis le 22 mars ?","Si tu ne pouvais garder qu'une seule habitude de ce journal, laquelle ce serait ?","Qu'est-ce que tu voudrais dire à la Juju du 22 mars qui a commencé tout ça ?","Qu'est-ce que tu ressens en écrivant ces dernières pages ?","C'était quoi, finalement, la vraie raison pour laquelle tu as commencé ce journal ?","Comment tu continues, à partir de demain, maintenant que ce chapitre se ferme ?"];
 
 /* =========================================================
    LOGIN
