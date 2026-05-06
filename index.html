@@ -608,7 +608,7 @@ function renderDay(){
   document.getElementById('dhNum').textContent=d.getDate();
   document.getElementById('dhMonth').textContent=`${MON_FR[d.getMonth()]} ${d.getFullYear()}`;
   document.getElementById('mantraEl').textContent=MANTRAS[curIdx]||
-  document.getElementById('questionDuJour').textContent=QUESTIONS[curIdx]||'Qu'est-ce que tu ressens aujourd'hui ?';
+  document.getElementById("questionDuJour").textContent=QUESTIONS[curIdx]||"Quel est ton ressenti aujourd'hui ?";
   document.getElementById('mantraEl').textContent=MANTRAS[curIdx]||'✨ C\'est une nouvelle journée. Make it count.';
   document.getElementById('prevBtn').disabled=curIdx===0;
   document.getElementById('nextBtn').disabled=curIdx===DAYS.length-1;
