@@ -1,29 +1,27 @@
 # CLAUDE.md — mon-journal
 
-## Ce que fait cet outil
-Journal intime personnel — recueil d'actions, ressentis et réflexions au quotidien.
-Usage strictement personnel.
-
-## URL de production
+## URL déployée
 https://jujuem44-lab.github.io/mon-journal/
 
-## Structure du repo
-- `index.html` — fichier unique, tout le code est dedans (HTML + CSS + JS)
+## Objectif
+Journal et projet perso — capture d'anecdotes et mémoire personnelle (soirées, moments absurdes de vente).
 
-## Airtable
-- **Base :** `appITdhAzHBgYWW1e` (JOURNAL_JUJU)
-- **Table Entrées Journal :** `tblz3cnfFrFl27758`
+## Fichiers principaux
+À documenter (repo non synchronisé localement).
 
-## Sécurité
-- Le token Airtable est stocké localement (localStorage) — jamais dans le code GitHub
-- Ne jamais hardcoder le token dans index.html
+## Stack technique
+HTML/CSS/JS vanilla — Charte UI v2.0 (DM Sans + IBM Plex Mono, light mode, variables CSS)
 
-## Règles de développement
-- Toujours travailler dans `index.html` — ne jamais créer de fichiers séparés CSS/JS
-- Ne jamais modifier les IDs Airtable sans confirmation explicite
-- Conserver la logique de stockage du token en localStorage — critique pour la sécurité
-- Tester toujours en local avant push (ouvrir index.html dans le navigateur)
-- Déploiement : push sur `main` → GitHub Pages se met à jour automatiquement
+## Airtable connectée
+Aucune à ce jour. Architecture prévue : Airtable en lecture (interface), pas Notion.
 
-## Propriétaire
-Juju — usage personnel
+## Webhooks Make actifs
+Aucun.
+
+## Règles spécifiques
+- Contenu privé — ne pas exposer de données personnelles dans les commits
+- Light mode uniquement, sans exception
+
+## Ne pas faire
+- Commiter du contenu personnel identifiable
+- Ajouter des connexions Make sans vérification préalable
